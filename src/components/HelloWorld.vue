@@ -1,70 +1,41 @@
 <template>
-  <el-container class="layout-container-demo">
-    <el-aside width="200px" class="main-menu">
-      <el-scrollbar>
-        <img alt="logo" width="200px" height="46px" src="../assets/logo.png">
-        <el-menu :default-openeds="['1', '3']">
-          <el-sub-menu index="1">
+  <el-container class="layout-container">
+    <el-aside width="210px" class="main-menu">
+      <!-- <el-scrollbar> -->
+        <!-- <el-menu :default-openeds="['1', '2', '3']"> -->
+        <el-menu>
+          <img alt="logo" width="200px" height="46px" src="../assets/logo.png">
+          <el-menu-item index="1" :to="{ path: '/sss.html' }"><el-icon><List /></el-icon>任务中心</el-menu-item>
+          <el-menu-item index="2" :to="{ path: '/sss.html' }"><el-icon><Document /></el-icon>信息中心</el-menu-item>
+          <el-menu-item index="3" :to="{ path: '/sss.html' }"><el-icon><Setting /></el-icon>选项</el-menu-item>
+          <!-- <el-sub-menu index="1">
             <template #title>
-              <el-icon><message /></el-icon>Navigator One
+              <el-icon><message /></el-icon>任务中心
             </template>
-            <el-menu-item-group>
-              <template #title>Group 1</template>
-              <el-menu-item index="1-1">Option 1</el-menu-item>
-              <el-menu-item index="1-2">Option 2</el-menu-item>
-            </el-menu-item-group>
-            <el-menu-item-group title="Group 2">
-              <el-menu-item index="1-3">Option 3</el-menu-item>
-            </el-menu-item-group>
-            <el-sub-menu index="1-4">
-              <template #title>Option4</template>
-              <el-menu-item index="1-4-1">Option 4-1</el-menu-item>
-            </el-sub-menu>
+            <el-menu-item index="1-1"><el-icon><List /></el-icon>查看任务</el-menu-item>
           </el-sub-menu>
           <el-sub-menu index="2">
             <template #title>
-              <el-icon><icon-menu /></el-icon>Navigator Two
+              <el-icon><icon-menu /></el-icon>档案中心
             </template>
-            <el-menu-item-group>
-              <template #title>Group 1</template>
-              <el-menu-item index="2-1">Option 1</el-menu-item>
-              <el-menu-item index="2-2">Option 2</el-menu-item>
-            </el-menu-item-group>
-            <el-menu-item-group title="Group 2">
-              <el-menu-item index="2-3">Option 3</el-menu-item>
-            </el-menu-item-group>
-            <el-sub-menu index="2-4">
-              <template #title>Option 4</template>
-              <el-menu-item index="2-4-1">Option 4-1</el-menu-item>
-            </el-sub-menu>
+            <el-menu-item index="2-1"><el-icon><List /></el-icon>任务设置</el-menu-item>
           </el-sub-menu>
           <el-sub-menu index="3">
             <template #title>
-              <el-icon><setting /></el-icon>Navigator Three
+              <el-icon><setting /></el-icon>选项
             </template>
-            <el-menu-item-group>
-              <template #title>Group 1</template>
-              <el-menu-item index="3-1">Option 1</el-menu-item>
-              <el-menu-item index="3-2">Option 2</el-menu-item>
-            </el-menu-item-group>
-            <el-menu-item-group title="Group 2">
-              <el-menu-item index="3-3">Option 3</el-menu-item>
-            </el-menu-item-group>
-            <el-sub-menu index="3-4">
-              <template #title>Option 4</template>
-              <el-menu-item index="3-4-1">Option 4-1</el-menu-item>
-            </el-sub-menu>
-          </el-sub-menu>
+            <el-menu-item index="3-1"><el-icon><List /></el-icon>任务设置</el-menu-item>
+          </el-sub-menu> -->
         </el-menu>
-      </el-scrollbar>
+      <!-- </el-scrollbar> -->
     </el-aside>
     <el-container class="page">
       <div aria-label="A complete example of page header">
         <el-page-header @back="onBack">
           <template #breadcrumb>
             <el-breadcrumb separator="/">
-              <el-breadcrumb-item :to="{ path: './page-header.html' }">
-                homepage
+              <el-breadcrumb-item :to="{ path: '/' }">
+                Intelligence Center
               </el-breadcrumb-item>
               <el-breadcrumb-item>
                 <a href="./page-header.html">route 1</a>
@@ -123,7 +94,7 @@
 </template>
 
 <script setup>
-import { Menu as IconMenu, Message, Setting } from '@element-plus/icons-vue'
+import { List, Document, Setting } from '@element-plus/icons-vue'
 import { ElNotification as notify } from 'element-plus'
 const onBack = () => {
   notify('Back')
@@ -132,32 +103,36 @@ const onBack = () => {
 </script>
 
 <style scoped>
-.layout-container-demo .el-header {
+.layout-container .el-header {
   /* position: relative; */
   background-color: var(--el-color-primary-light-7);
   color: var(--el-text-color-primary);
 }
-.layout-container-demo .el-aside {
+.layout-container .el-aside {
   color: var(--el-text-color-primary);
   background: var(--el-color-primary-light-8);
 }
-.layout-container-demo .el-menu {
+.layout-container .el-menu {
   border-right: none;
 }
-.layout-container-demo .el-main {
+.layout-container .el-main {
   padding: 0;
 }
-.layout-container-demo .toolbar {
+.layout-container .toolbar {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   height: 100%;
   right: 20px;
 }
-.layout-container-demo .main-menu  {
+.layout-container .main-menu  {
   border-right: 1px solid #dcdfe6; /* 设置右边的边框 */
 }
-.layout-container-demo .page{
+.layout-container .page{
   margin-left: 20px;
+}
+.main-menu{
+  height: 97vh;
+  background-color: #fff !important;
 }
 </style>
