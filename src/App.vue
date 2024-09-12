@@ -1,18 +1,17 @@
 <template>
-  <CommonHeader/>
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <!-- <CommonHeader/> -->
+  <MainPage msg="Welcome to Your Vue.js App"/>
  
 </template>
 
 <script>
 // import CommonHeader from './components/CommonHeader.vue'
-import HelloWorld from './components/HelloWorld.vue'
+import MainPage from './components/MainPage.vue'
 
 export default {
   name: 'App',
   components: {
-    // CommonHeader,
-    HelloWorld
+    MainPage: MainPage
   }
 }
 </script>
