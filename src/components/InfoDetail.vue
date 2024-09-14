@@ -8,7 +8,7 @@
               情报中心
             </el-breadcrumb-item>
             <el-breadcrumb-item>
-              <a href="./page-header.html">信息中心</a>
+              <a href="./page-header.html">情报档案</a>
             </el-breadcrumb-item>
             <el-breadcrumb-item>信息详情</el-breadcrumb-item>
           </el-breadcrumb>
@@ -34,28 +34,12 @@
             <el-button type="primary" class="ml-2">编辑</el-button>
           </div>
         </template>
-
-        <!-- <el-descriptions :column="3" size="small" class="mt-4">
-          <el-descriptions-item label="作者">
-            JimYJ
-          </el-descriptions-item>
-          <el-descriptions-item label="Telephone">
-            18100000000
-          </el-descriptions-item>
-          <el-descriptions-item label="Place">Suzhou</el-descriptions-item>
-          <el-descriptions-item label="Remarks">
-            <el-tag size="small">School</el-tag>
-          </el-descriptions-item>
-          <el-descriptions-item label="Address">
-            No.1188, Wuzhong Avenue, Wuzhong District, Suzhou, Jiangsu Province
-          </el-descriptions-item>
-        </el-descriptions> -->
         <el-descriptions
-  class="margin-top"
-  :column="3"
-  :size="size"
-  border
->
+          class="margin-top"
+          :column="3"
+          :size="size"
+          border
+        >
   <!-- <template #extra>
     <el-button type="primary">Operation</el-button>
   </template> -->
