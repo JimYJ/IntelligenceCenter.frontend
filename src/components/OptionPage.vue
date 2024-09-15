@@ -1,38 +1,98 @@
 <template>
-    <el-container class="list-page">
-            <el-breadcrumb separator="/">
-                <el-breadcrumb-item :to="{ path: '/' }">情报中心</el-breadcrumb-item>
-                <el-breadcrumb-item><a href="./page-header.html">情报档案</a></el-breadcrumb-item>
-                <el-breadcrumb-item>档案列表</el-breadcrumb-item>
-            </el-breadcrumb>
-            <template #content>
-                <div class="flex gap-4">
-                    <div>
-                    <div class="sub-title my-2 text-sm text-gray-600">
-                        list suggestions when activated
-                    </div>
-                    <el-autocomplete
-                        v-model="state1"
-                        :fetch-suggestions="querySearch"
-                        clearable
-                        class="inline-input w-50"
-                        placeholder="Please Input"
-                        @select="handleSelect"
-                    />
-                    </div>
-                </div>
+    <el-drawer v-model="dialogFormVisible" title="首选项" width="800">
+        <el-form :model="option">
+            <el-divider content-position="left">数据库配置</el-divider>
+            <el-form-item label="数据存储模式" label-width="120">
+                <el-radio-group v-model="option.dbSelect">
+                    <el-radio-button value="1" size="large">SQlLite</el-radio-button>
+                    <el-radio-button value="2" size="large">pocketbase</el-radio-button>
+                    <el-radio-button value="3" size="large">mysql</el-radio-button>
+                    <el-radio-button value="4" size="large">clickhouse</el-radio-button>
+                </el-radio-group>
+            </el-form-item>
+            <el-form-item label="数据库设置" class="flex gap-8 mb-4 items-center" label-width="120">
+                <el-space :size="8" spacer=" " wrap>
+                    <el-input v-model="option.dbIP" placeholder="IP/域名" style="width: 300px" />
+                    <el-input v-model="option.dbPort" placeholder="端口" style="width: 80px" />
+                    <el-input v-model="option.dbName" placeholder="数据库名称" style="width: 300px" />
+                    <el-input v-model="option.dbAccount" placeholder="账号" style="width: 300px" />
+                    <el-input v-model="option.dbPass" placeholder="密码" style="width: 300px" />
+                    <el-text class="mx-1">首次连接会创建数据库</el-text>
+                </el-space>
+            </el-form-item>
+            <el-divider content-position="left">LLM配置</el-divider>
+            <el-form-item label="LLM API选择" label-width="120">
+                <el-radio-group v-model="option.llmSelect">
+                    <el-radio-button value="1" size="large">OpenAI API(及兼容API)</el-radio-button>
+                    <el-radio-button value="2" size="large">Ollama</el-radio-button>
+                    <el-radio-button value="3" size="large">Siliconflow API</el-radio-button>
+                </el-radio-group>
+            </el-form-item>
+            <el-form-item label="LLM API配置" label-width="120">
+                <el-space :size="8" spacer=" " wrap>
+                    <el-input v-model="option.dbIP" placeholder="API地址" style="width: 300px" />
+                    <el-input v-model="option.dbPort" placeholder="API秘钥" style="width: 300px" />
+                    <el-input v-model="option.dbName" placeholder="指定模型 e.g. gpt-4o-2024-08-06" style="width: 300px" />
+                </el-space>
+            </el-form-item>
+            <el-divider content-position="left">情报抓取器配置(爬虫)</el-divider>
+            <el-form-item label="抓取器选择" label-width="120">
+                <el-radio-group v-model="option.llmSelect">
+                    <el-radio-button value="1" size="large">内置爬虫</el-radio-button>
+                    <el-radio-button value="2" size="large">headless浏览器</el-radio-button>
+                    <el-radio-button value="3" size="large">外部爬虫</el-radio-button>
+                </el-radio-group>
+            </el-form-item>
+            <el-form-item label="并发数" label-width="120">
+                <el-input-number v-model="num" :min="1" :max="1024" @change="handleChange" style="width: 150px" />
+            </el-form-item>
+            <el-form-item label="抓取间隔(秒)" label-width="120">
+                <el-input-number v-model="num" :min="1" :max="3600" @change="handleChange" style="width: 150px" />
+            </el-form-item>
+            <el-form-item label="全局抓取深度" label-width="120">
+                <el-input-number v-model="num" :min="1" :max="99" @change="handleChange" style="width: 150px" />
+            </el-form-item>
+            <el-form-item label="每秒请求上限" label-width="120">
+                <el-input-number v-model="num" :min="1" :max="1024" @change="handleChange" style="width: 150px" />
+            </el-form-item>
+            <el-form-item label="自动模拟多IP" label-width="120">
+                <el-switch v-model="num" />
+            </el-form-item>
+            <el-form-item label="使用代理IP池" label-width="120">
+                <el-switch v-model="num" />
+                <el-divider direction="vertical" border-style="dashed" />
+                <el-text class="mx-1">将IP列表文件放在本软件的proxyip目录下</el-text>
+            </el-form-item>
+        </el-form>
+        <template #footer>
+            <div class="dialog-footer">
+                <el-button @click="cancel">取消</el-button>
+                <el-button type="primary" @click="submit">保存</el-button>
+            </div>
         </template>
-    </el-container>
+    </el-drawer>
 </template>
 
 <script setup>
+import { reactive, defineEmits } from "vue";
+const emit = defineEmits(["updateShow"]);
+
+const cancel = () => {
+    emit("updateShow", false);
+};
+
+const submit = () => {
+    emit("updateShow", false);
+};
+
+const option = reactive({
+    dbSelect: "1", // 默认：SQlLite 枚举值 1-SQlLite 2-pocketbase 3-mysql(支持协议的分布式数据库) 4-clickhouse
+    llmSelect: "1", // 默认OpenAI API 枚举值 1-OpenAI API 2-Ollama 3-Siliconflow API
+    dbIP: "",
+    dbPort: "",
+    dbName: "",
+    dbAccount: "",
+    dbPass: "",
+});
 </script>
 
-<style scoped>
-.pagination-block{
-    margin-top: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-</style>

@@ -1,27 +1,25 @@
 <template>
-  <!-- <CommonHeader/> -->
-  <MainPage msg="Welcome to Your Vue.js App"/>
- 
+    <MainPage msg="Welcome to Your Vue.js App" />
+
 </template>
 
 <script>
-// import CommonHeader from './components/CommonHeader.vue'
 import MainPage from './components/MainPage.vue'
 
 export default {
-  name: 'App',
-  components: {
-    MainPage: MainPage
-  }
+    name: 'App',
+    components: {
+        MainPage: MainPage
+    }
 }
 </script>
 
 <style>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+    font-family: Avenir, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    color: #2c3e50;
 }
 </style>
