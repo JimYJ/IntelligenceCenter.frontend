@@ -18,7 +18,7 @@
                     <el-radio-button value="2">每周</el-radio-button>
                 </el-radio-group>
             </el-form-item>
-            <el-form-item label="选择日期" v-if="newTask.execCycleOption==2" label-width="150">
+            <el-form-item label="选择日期" v-if="newTask.execCycleOption==2&&newTask.execOption==2" label-width="150">
                 <el-checkbox v-model="checked3" label="周一" />
                 <el-checkbox v-model="checked4" label="周二" />
                 <el-checkbox v-model="checked4" label="周三" />
