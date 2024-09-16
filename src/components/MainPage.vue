@@ -10,31 +10,32 @@
                     <el-icon>
                         <Document />
                     </el-icon>信息中心</el-menu-item>
-                <el-menu-item @click="dialogFormVisible = true">
+                <el-menu-item @click="showOption = true">
                     <el-icon>
                         <Setting />
                     </el-icon>首选项</el-menu-item>
             </el-menu>
         </el-aside>
-        <InfoDetail v-if="$route.path==='/info/detail'" />
-        <InfoList v-if="$route.path==='/info/list'" />
+        <ArchiveDetail v-if="$route.path==='/info/detail'" />
+        <ArchiveList v-if="$route.path==='/info/list'" />
         <TaskList v-if="$route.path==='/task/list'" />
-        <OptionPage v-model="dialogFormVisible" @updateShow="showHide" />
+        <OptionPage v-model="showOption" @updateShow="showHideOption" />
 
     </el-container>
 </template>
 
 <script setup>
-import InfoDetail from './InfoDetail.vue'
-import InfoList from './InfoList.vue'
+import ArchiveDetail from './ArchiveDetail.vue'
+import ArchiveList from './ArchiveList.vue'
 import TaskList from './TaskList.vue'
 import OptionPage from './OptionPage.vue'
 import { List, Document, Setting } from '@element-plus/icons-vue'
 import { ref } from 'vue'
-const dialogFormVisible = ref(false)
-function showHide(vision) {
-    dialogFormVisible.value = vision;
-}
+const showOption = ref(false)
+
+const showHideOption = (vision) => {
+    showOption.value = vision;
+};
 </script>
 
 <style scoped>

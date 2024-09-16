@@ -12,7 +12,7 @@
                 <div class="flex items-center">
                     <span class="text-large font-600 mr-3">档案列表</span>
                     <el-divider direction="vertical" />
-                    <el-button type="primary">创建档案</el-button>
+                    <el-button type="primary" @click="showCreateArchive = true">创建档案</el-button>
                 </div>
             </template>
             <template #extra>
@@ -33,14 +33,20 @@
             <div class="pagination-block">
                 <el-pagination :page-size="12" :pager-count="curPage" layout="prev, pager, next, jumper" :total="1000" />
             </div>
+            <CreateArchive v-model="showCreateArchive" @updateShow="hideCreateArchive" />
         </el-page-header>
     </el-container>
 </template>
 
 <script setup>
+import { ref } from 'vue'
+import CreateArchive from './CreateArchive.vue'
+const showCreateArchive = ref(true)
+const hideCreateArchive = (vision) => {
+    showCreateArchive.value = vision;
+};
 const onBack = () => {
 }
-const curPage = 11
 const tableData = [
     {
         date: '2016-05-03',
