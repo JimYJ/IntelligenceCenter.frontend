@@ -27,6 +27,7 @@
         <ArchiveList v-if="$route.path==='/info/list'" />
         <TaskList v-if="$route.path==='/task/list'" />
         <LlmApiList v-if="$route.path==='/api/list'" />
+        <StatisticPage v-if="$route.path==='/'" />
         <OptionPage v-model="showOption" @updateShow="showHideOption" />
 
     </el-container>
@@ -38,6 +39,7 @@ import ArchiveList from './ArchiveList.vue'
 import TaskList from './TaskList.vue'
 import OptionPage from './OptionPage.vue'
 import LlmApiList from './LlmApiList.vue'
+import StatisticPage from './StatisticPage.vue'
 import { List, Document, Setting, Odometer, Connection } from '@element-plus/icons-vue'
 import { ref } from 'vue'
 const showOption = ref(false)
