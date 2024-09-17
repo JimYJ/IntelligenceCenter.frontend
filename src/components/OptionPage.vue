@@ -16,22 +16,38 @@
                     <el-input v-model="option.dbPort" placeholder="端口" style="width: 80px" />
                     <el-input v-model="option.dbAccount" placeholder="账号" style="width: 300px" />
                     <el-input v-model="option.dbPass" placeholder="密码" style="width: 300px" />
-                    <el-text class="mx-1">首次连接会创建数据库</el-text>
+                    <el-tooltip content="首次连接会初始化数据库" raw-content>
+                        <el-icon>
+                            <QuestionFilled />
+                        </el-icon>
+                    </el-tooltip>
                 </el-space>
             </el-form-item>
             <el-divider content-position="left">LLM配置</el-divider>
             <el-form-item label="LLM API选择" label-width="150">
-                <el-radio-group v-model="option.llmSelect">
-                    <el-radio-button value="1">OpenAI API(兼容)</el-radio-button>
-                    <el-radio-button value="2">Ollama</el-radio-button>
-                    <el-radio-button value="3">Siliconflow API</el-radio-button>
-                </el-radio-group>
+                <el-space :size="8" spacer=" " wrap>
+                    <el-radio-group v-model="option.llmSelect">
+                        <el-radio-button value="1">OpenAI API</el-radio-button>
+                        <el-radio-button value="2">Ollama</el-radio-button>
+                        <el-radio-button value="3">Siliconflow API</el-radio-button>
+                    </el-radio-group>
+                    <el-tooltip content="OpenAI API类型包含兼容OpenAI API的各种衍生API,例如Kimi API/oobabooga/LLM Studio等" raw-content>
+                        <el-icon>
+                            <QuestionFilled />
+                        </el-icon>
+                    </el-tooltip>
+                </el-space>
             </el-form-item>
             <el-form-item label="LLM API配置" label-width="150">
                 <el-space :size="8" spacer=" " wrap>
                     <el-input v-model="option.dbIP" placeholder="API地址" style="width: 300px" />
                     <el-input v-model="option.dbPort" placeholder="API秘钥" style="width: 300px" />
-                    <el-input v-model="option.dbName" placeholder="指定模型 e.g. gpt-4o-2024-08-06" style="width: 300px" />
+                    <el-input v-model="option.dbName" placeholder="指定模型" style="width: 300px" />
+                    <el-tooltip content="例如:gpt-4o-2024-08-06" raw-content>
+                        <el-icon>
+                            <QuestionFilled />
+                        </el-icon>
+                    </el-tooltip>
                 </el-space>
             </el-form-item>
             <el-divider content-position="left">情报抓取器配置</el-divider>
@@ -57,9 +73,14 @@
                 <el-switch v-model="option.crawlerVirtualIP" />
             </el-form-item>
             <el-form-item label="使用代理IP池" label-width="150">
-                <el-switch v-model="option.crawlerIPPool" />
-                <el-divider direction="vertical" border-style="dashed" />
-                <el-text class="mx-1">将IP列表文件放在本软件的proxyip目录下</el-text>
+                <el-space :size="8" spacer=" " wrap>
+                    <el-switch v-model="option.crawlerIPPool" />
+                    <el-tooltip content="需要先将准备好的IP列表文件放在本软件的proxyip目录下，每个IP用英文逗号隔开" raw-content>
+                        <el-icon>
+                            <QuestionFilled />
+                        </el-icon>
+                    </el-tooltip>
+                </el-space>
             </el-form-item>
         </el-form>
         <template #footer>
@@ -73,6 +94,7 @@
 
 <script setup>
 import { reactive, defineEmits } from "vue";
+import { QuestionFilled } from '@element-plus/icons-vue'
 const emit = defineEmits(["updateShow"]);
 
 const cancel = () => {

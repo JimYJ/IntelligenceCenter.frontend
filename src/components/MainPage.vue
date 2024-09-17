@@ -3,6 +3,9 @@
         <el-aside width="210px" class="main-menu">
             <el-menu :router="true">
                 <img alt="logo" width="200px" height="46px" src="../assets/logo.png">
+                <el-menu-item index="/"><el-icon>
+                        <Odometer />
+                    </el-icon>仪表盘</el-menu-item>
                 <el-menu-item index="/task/list"><el-icon>
                         <List />
                     </el-icon>任务中心</el-menu-item>
@@ -10,6 +13,10 @@
                     <el-icon>
                         <Document />
                     </el-icon>信息中心</el-menu-item>
+                <el-menu-item index="/api/list">
+                    <el-icon>
+                        <Connection />
+                    </el-icon>LLM API</el-menu-item>
                 <el-menu-item @click="showOption = true">
                     <el-icon>
                         <Setting />
@@ -19,6 +26,7 @@
         <ArchiveDetail v-if="$route.path==='/info/detail'" />
         <ArchiveList v-if="$route.path==='/info/list'" />
         <TaskList v-if="$route.path==='/task/list'" />
+        <LlmApiList v-if="$route.path==='/api/list'" />
         <OptionPage v-model="showOption" @updateShow="showHideOption" />
 
     </el-container>
@@ -29,7 +37,8 @@ import ArchiveDetail from './ArchiveDetail.vue'
 import ArchiveList from './ArchiveList.vue'
 import TaskList from './TaskList.vue'
 import OptionPage from './OptionPage.vue'
-import { List, Document, Setting } from '@element-plus/icons-vue'
+import LlmApiList from './LlmApiList.vue'
+import { List, Document, Setting, Odometer, Connection } from '@element-plus/icons-vue'
 import { ref } from 'vue'
 const showOption = ref(false)
 
