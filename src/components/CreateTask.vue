@@ -68,7 +68,14 @@
             </el-form-item>
             <el-divider content-position="left">情报抓取器配置</el-divider>
             <el-form-item label="使用全局设置" label-width="150">
-                <el-switch v-model="newTask.crawlerUseGroup" />
+                <el-space :size="8" spacer=" " wrap>
+                    <el-switch v-model="newTask.crawlerUseGroup" />
+                    <el-tooltip content="当首选项中开启[全局并发池]设置时，本开关不可编辑" raw-content>
+                        <el-icon>
+                            <QuestionFilled />
+                        </el-icon>
+                    </el-tooltip>
+                </el-space>
             </el-form-item>
             <el-form-item label="抓取器选择" label-width="150" v-if="newTask.crawlerUseGroup==false">
                 <el-radio-group v-model="newTask.crawlerSelect">
@@ -88,8 +95,15 @@
             <el-form-item label="每秒请求上限" label-width="150" v-if="newTask.crawlerUseGroup==false">
                 <el-input-number v-model="newTask.crawlerRateLimit" :min="1" :max="1024" @change="handleChange" style="width: 150px" />
             </el-form-item>
-            <el-form-item label="自动模拟多IP" label-width="150" v-if="newTask.crawlerUseGroup==false">
-                <el-switch v-model="newTask.crawlerVirtualIP" />
+            <el-form-item label="启动虚拟IP" label-width="150" v-if="newTask.crawlerUseGroup==false">
+                <el-space :size="8" spacer=" " wrap>
+                    <el-switch v-model="newTask.crawlerVirtualIP" />
+                    <el-tooltip content="虚拟IP只对少部分网站有效，如果无效被限制访问，则需要配置代理IP池" raw-content>
+                        <el-icon>
+                            <QuestionFilled />
+                        </el-icon>
+                    </el-tooltip>
+                </el-space>
             </el-form-item>
             <el-form-item label="使用代理IP池" label-width="150" v-if="newTask.crawlerUseGroup==false">
                 <el-space :size="8" spacer=" " wrap>

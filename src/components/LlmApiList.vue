@@ -18,13 +18,19 @@
             <template #extra>
                 <div class="flex items-center">
                     <!-- <el-button>翻译</el-button> -->
-                    <el-button type="primary" class="ml-2">刷新</el-button>
+                    <el-input v-model="input3" placeholder="输入内容搜索" class="input-with-select">
+                        <template #append>
+                            <el-button :icon="Search" />
+                        </template>
+                    </el-input>
+                    <!-- <el-button type="primary" class="ml-2">刷新</el-button> -->
                 </div>
             </template>
             <el-table :data="tableData" style="width: 100%;">
                 <el-table-column prop="api_type" label="API类型" min-width="200" />
-                <el-table-column prop="api_url" label="API地址" min-width="200" />
-                <el-table-column prop="api_secret" label="API秘钥" min-width="300" />
+                <el-table-column prop="api_set_name" label="API配置名称" min-width="200" />
+                <el-table-column prop="api_url" label="API地址" min-width="400" />
+                <el-table-column prop="api_secret" label="API秘钥" min-width="200" />
             </el-table>
             <div class="pagination-block">
                 <el-pagination :page-size="12" :pager-count="curPage" layout="prev, pager, next, jumper" :total="1000" />
@@ -36,6 +42,7 @@
 
 <script setup>
 import CreateAPISetup from './CreateAPISetup.vue'
+import { Search } from '@element-plus/icons-vue'
 import { ref } from 'vue'
 const onBack = () => {
 }
@@ -47,6 +54,7 @@ const hideCreateAPI = (vision) => {
 const tableData = [
     {
         api_type: 'OpenAI API',
+        api_set_name: 'OpenAIKey1',
         api_url: 'https://api.openai.com/v1/chat/completions',
         api_secret: 'PI&*GYTEWSG*4ya0pe4rg',
     },

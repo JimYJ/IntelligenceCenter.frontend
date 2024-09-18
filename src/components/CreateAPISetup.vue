@@ -17,13 +17,9 @@
             </el-form-item>
             <el-form-item label="LLM API配置" label-width="150">
                 <el-space :size="8" spacer=" " wrap>
+                    <el-input v-model="option.apiSetName" placeholder="配置名称" style="width: 300px" />
                     <el-input v-model="option.apiUrl" placeholder="API地址" style="width: 300px" />
                     <el-input v-model="option.apiSecret" placeholder="API秘钥" style="width: 300px" />
-                    <el-tooltip content="例如:gpt-4o-2024-08-06" raw-content>
-                        <el-icon>
-                            <QuestionFilled />
-                        </el-icon>
-                    </el-tooltip>
                 </el-space>
             </el-form-item>
         </el-form>
@@ -38,7 +34,7 @@
 
 <script setup>
 import { reactive, defineEmits } from "vue";
-
+import { QuestionFilled } from '@element-plus/icons-vue'
 const emit = defineEmits(["updateShow"]);
 const cancel = () => {
     emit("updateShow", false);
@@ -49,10 +45,10 @@ const submit = () => {
 };
 
 const option = reactive({
+    apiSetName: "",
     llmSelect: "1", // 默认：OpenAI API 枚举值 1-OpenAI API 2-Ollama 3-Siliconflow API
     apiUrl: "",
     apiSecret: "",
 });
 
 </script>
-

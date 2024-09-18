@@ -16,7 +16,12 @@
             <template #extra>
                 <div class="flex items-center">
                     <!-- <el-button>翻译</el-button> -->
-                    <el-button type="primary" class="ml-2">刷新</el-button>
+                    <!-- <el-button type="primary" class="ml-2">刷新</el-button> -->
+                    <el-input v-model="input3" placeholder="输入内容搜索" class="input-with-select">
+                        <template #append>
+                            <el-button :icon="Search" />
+                        </template>
+                    </el-input>
                 </div>
             </template>
             <el-table :data="tableData" style="width: 100%;">
