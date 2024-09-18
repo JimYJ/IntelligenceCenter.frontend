@@ -5,7 +5,7 @@
                 <template #breadcrumb>
                     <el-breadcrumb separator="/">
                         <el-breadcrumb-item :to="{ path: '/' }">
-                            情报中心
+                            Intelligence Center
                         </el-breadcrumb-item>
                         <el-breadcrumb-item>
                             <a href="./page-header.html">情报档案</a>

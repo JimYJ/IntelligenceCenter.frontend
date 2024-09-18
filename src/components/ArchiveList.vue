@@ -3,7 +3,7 @@
         <el-page-header @back="onBack" style="width: 100%;">
             <template #breadcrumb>
                 <el-breadcrumb separator="/">
-                    <el-breadcrumb-item :to="{ path: '/' }">情报中心</el-breadcrumb-item>
+                    <el-breadcrumb-item :to="{ path: '/' }">Intelligence Center</el-breadcrumb-item>
                     <el-breadcrumb-item><a href="./page-header.html">情报档案</a></el-breadcrumb-item>
                     <el-breadcrumb-item>档案列表</el-breadcrumb-item>
                 </el-breadcrumb>
