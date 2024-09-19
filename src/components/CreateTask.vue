@@ -67,13 +67,13 @@
                     <el-input v-model="newTask.archiveName" placeholder="档案名称" style="width: 300px" />
                 </el-space>
             </el-form-item>
-            <el-form-item label="抓取内容" v-if="newTask.archiveOption==2" label-width="150">
+            <!-- <el-form-item label="抓取内容" v-if="newTask.archiveOption==2" label-width="150">
                 <el-space :size="8" spacer=" " wrap v-for="(contexts, index) in contextIndexs" :key="index">
                     <el-input v-model="contextIndexs[index]" placeholder="填写要提取的内容" style="width: 300px" />
                 </el-space>
                 <el-button :icon="Plus" @click="addInput" />
                 <el-button :icon="Minus" @click="removeInput" />
-            </el-form-item>
+            </el-form-item> -->
             <el-divider content-position="left">情报抓取器配置</el-divider>
             <el-form-item label="使用全局设置" label-width="150">
                 <el-space :size="8" spacer=" " wrap>
@@ -88,7 +88,13 @@
             <el-form-item label="抓取器选择" label-width="150" v-if="newTask.crawlerUseGroup==false">
                 <el-radio-group v-model="newTask.crawlerSelect">
                     <el-radio-button value="1">内置爬虫</el-radio-button>
-                    <el-radio-button value="2">headless浏览器</el-radio-button>
+                    <el-radio-button value="2">headless浏览器
+                        <el-tooltip content="使用headless浏览器模式需要下载chromedriver文件到driver目录" raw-content>
+                            <el-icon>
+                                <QuestionFilled />
+                            </el-icon>
+                        </el-tooltip></el-radio-button>
+                    <el-radio-button value="3">firecrawl</el-radio-button>
                 </el-radio-group>
             </el-form-item>
             <el-form-item label="并发数" label-width="150" v-if="newTask.crawlerUseGroup==false">
@@ -135,7 +141,7 @@
 
 <script setup>
 import { reactive, defineEmits, ref } from "vue";
-import { Plus, Minus, QuestionFilled } from '@element-plus/icons-vue'
+import { QuestionFilled } from '@element-plus/icons-vue'
 const emit = defineEmits(["updateShow"]);
 
 const cancel = () => {
@@ -147,19 +153,19 @@ const submit = () => {
 };
 
 // 初始化输入框数组
-const contextIndexs = ref(['标题', '内容', '发布时间'])
+// const contextIndexs = ref(['标题', '内容', '发布时间'])
 const keyword = ref([])
 
 
 // 添加输入框
-function addInput() {
-    contextIndexs.value.push('');
-    console.log(contextIndexs)
-}
+// function addInput() {
+//     contextIndexs.value.push('');
+//     console.log(contextIndexs)
+// }
 
-function removeInput() {
-    contextIndexs.value.splice(contextIndexs.value.length - 1, 1);
-}
+// function removeInput() {
+//     contextIndexs.value.splice(contextIndexs.value.length - 1, 1);
+// }
 
 
 const newTask = reactive({
@@ -172,8 +178,8 @@ const newTask = reactive({
     archiveOption: "1",
     archiveName: "",
     archiveID: 1,
-    archiveList: contextIndexs,
-    crawlerContexts: contextIndexs,
+    // archiveList: contextIndexs,
+    // crawlerContexts: contextIndexs,
     crawlerSelect: "1",
     crawlerUseGroup: true,
     crawlerConcurrency: 5,

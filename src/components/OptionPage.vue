@@ -8,6 +8,7 @@
                     <el-radio-button value="2">pocketbase</el-radio-button>
                     <el-radio-button value="3">mysql</el-radio-button>
                     <el-radio-button value="4">clickhouse</el-radio-button>
+                    <!-- <el-radio-button value="5">elasticsearch</el-radio-button> -->
                 </el-radio-group>
             </el-form-item>
             <el-form-item label="数据库设置" class="flex gap-8 mb-4 items-center" label-width="150">
@@ -33,6 +34,7 @@
                                 <QuestionFilled />
                             </el-icon>
                         </el-tooltip></el-radio-button>
+                    <el-radio-button value="3">firecrawl</el-radio-button>
                 </el-radio-group>
             </el-form-item>
             <el-form-item label="并发数" label-width="150">
