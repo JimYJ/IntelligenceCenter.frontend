@@ -1,10 +1,18 @@
 <template>
-    <el-drawer v-model="dialogFormVisible" title="新建任务" width="600" size="600">
+    <el-drawer v-model="dialogFormVisible" title="新建任务" width="650" size="650">
         <el-form :model="newTask">
             <el-form-item label="任务设置" class="flex gap-8 mb-4 items-center" label-width="150">
                 <el-space :size="8" spacer=" " wrap>
                     <el-input v-model="newTask.name" placeholder="任务名称" style="width: 300px" />
                 </el-space>
+            </el-form-item>
+            <el-form-item label="信息抓取网址" label-width="150">
+                <el-input style="width: 300px" v-model="newTask.urlList" type="textarea" placeholder="网址以http://或https://为前缀，如果存在多个网址，每行一个网址" />
+            </el-form-item>
+            <el-form-item label="关键词过滤" class="flex gap-8 mb-4 items-center" label-width="150">
+                <el-select v-model="keyword" multiple filterable allow-create default-first-option :reserve-keyword="false" placeholder="输入关键词并回车" style="width: 300px">
+                    <el-option v-for="item in keyword" :key="item.value" :label="item.value" :value="item.value" />
+                </el-select>
             </el-form-item>
             <el-form-item label="执行时间" label-width="150">
                 <el-radio-group v-model="newTask.execOption">
@@ -140,6 +148,7 @@ const submit = () => {
 
 // 初始化输入框数组
 const contextIndexs = ref(['标题', '内容', '发布时间'])
+const keyword = ref([])
 
 
 // 添加输入框
@@ -155,6 +164,8 @@ function removeInput() {
 
 const newTask = reactive({
     name: "",
+    keyword: keyword,
+    urlList: "",
     execOption: "1", // 1立即开始 2周期循环
     execCycleOption: "1", // 1每日 2每周
     execTime: "",

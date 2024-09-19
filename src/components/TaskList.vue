@@ -41,6 +41,7 @@
 
 <script setup>
 import CreateTask from './CreateTask.vue'
+import { Search } from '@element-plus/icons-vue'
 import { ref } from 'vue'
 const onBack = () => {
 }

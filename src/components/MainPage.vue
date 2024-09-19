@@ -9,10 +9,10 @@
                 <el-menu-item index="/task/list"><el-icon>
                         <List />
                     </el-icon>任务中心</el-menu-item>
-                <el-menu-item index="/info/list">
+                <el-menu-item index="/archive/list">
                     <el-icon>
                         <Document />
-                    </el-icon>信息中心</el-menu-item>
+                    </el-icon>情报档案</el-menu-item>
                 <el-menu-item index="/api/list">
                     <el-icon>
                         <Connection />
@@ -23,13 +23,12 @@
                     </el-icon>首选项</el-menu-item>
             </el-menu>
         </el-aside>
-        <ArchiveDetail v-if="$route.path==='/info/detail'" />
-        <ArchiveList v-if="$route.path==='/info/list'" />
+        <ArchiveDetail v-if="$route.path==='/archive/detail'" />
+        <ArchiveList v-if="$route.path==='/archive/list'" />
         <TaskList v-if="$route.path==='/task/list'" />
         <LlmApiList v-if="$route.path==='/api/list'" />
         <StatisticPage v-if="$route.path==='/'" />
         <OptionPage v-model="showOption" @updateShow="showHideOption" />
-
     </el-container>
 </template>
 

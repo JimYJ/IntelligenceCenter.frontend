@@ -27,7 +27,7 @@
             <el-table :data="tableData" style="width: 100%;">
                 <el-table-column prop="date" label="档案标题" min-width="200">
                     <el-link type="primary" underline=false>
-                        <router-link :to="{ path: '/info/detail' }">俄乌战争系列</router-link>
+                        <router-link :to="{ path: '/archive/detail' }">俄乌战争系列</router-link>
                     </el-link>
                 </el-table-column>
                 <el-table-column prop="name" label="Name" min-width="200" />
@@ -41,6 +41,7 @@
 </template>
 
 <script setup>
+import { Search } from '@element-plus/icons-vue'
 const onBack = () => {
 }
 const tableData = [
