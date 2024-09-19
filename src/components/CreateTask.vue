@@ -33,18 +33,6 @@
             <el-form-item label="执行时间" v-if="newTask.execOption==2" label-width="150">
                 <el-time-picker v-model="newTask.execTime" placeholder="选择执行时间" />
             </el-form-item>
-            <el-form-item label="指定模型" label-width="150">
-                <el-space :size="8" spacer=" " wrap>
-                    <el-input v-model="newTask.name" placeholder="网页内容解析模型" style="width: 300px" />
-                    <el-input v-model="newTask.name" placeholder="信息提炼模型" style="width: 300px" />
-                    <el-input v-model="newTask.name" placeholder="指定模型" style="width: 300px" />
-                    <el-tooltip content="例如:gpt-4o-2024-08-06" raw-content>
-                        <el-icon>
-                            <QuestionFilled />
-                        </el-icon>
-                    </el-tooltip>
-                </el-space>
-            </el-form-item>
             <el-divider content-position="left">过滤器设置</el-divider>
             <el-form-item label="启用匹配过滤器" label-width="150">
                 <el-space :size="8" spacer=" " wrap>
