@@ -9,11 +9,6 @@
             <el-form-item label="信息抓取网址" label-width="150">
                 <el-input style="width: 300px" v-model="newTask.urlList" type="textarea" placeholder="网址以http://或https://为前缀，如果存在多个网址，每行一个网址" />
             </el-form-item>
-            <el-form-item label="关键词过滤" class="flex gap-8 mb-4 items-center" label-width="150">
-                <el-select v-model="keyword" multiple filterable allow-create default-first-option :reserve-keyword="false" placeholder="输入关键词并回车" style="width: 300px">
-                    <el-option v-for="item in keyword" :key="item.value" :label="item.value" :value="item.value" />
-                </el-select>
-            </el-form-item>
             <el-form-item label="执行时间" label-width="150">
                 <el-radio-group v-model="newTask.execOption">
                     <el-radio-button value="1">立即开始</el-radio-button>
@@ -49,6 +44,38 @@
                         </el-icon>
                     </el-tooltip>
                 </el-space>
+            </el-form-item>
+            <el-divider content-position="left">过滤器设置</el-divider>
+            <el-form-item label="启用匹配过滤器" label-width="150">
+                <el-space :size="8" spacer=" " wrap>
+                    <el-switch v-model="newTask.crawlerVirtualIP" />
+                    <el-tooltip content="开启过滤器后，不匹配过滤器内容的网页将不会被抓取，如果某项过滤设置未填写，该项过滤将不会生效" raw-content>
+                        <el-icon>
+                            <QuestionFilled />
+                        </el-icon>
+                    </el-tooltip>
+                </el-space>
+            </el-form-item>
+            <el-form-item label="域名匹配" label-width="150">
+                <el-input style="width: 300px" v-model="newTask.urlList" type="textarea" placeholder="例:www.baidu.com或baidu.com，多个网址请用英文逗号隔开，配置后只抓取匹配域名的网址" />
+            </el-form-item>
+            <el-form-item label="关键词匹配" class="flex gap-8 mb-4 items-center" label-width="150">
+                <el-space :size="8" spacer=" " wrap>
+                    <el-select v-model="keyword" multiple filterable allow-create default-first-option :reserve-keyword="false" placeholder="输入关键词并回车" style="width: 300px">
+                        <el-option v-for="item in keyword" :key="item.value" :label="item.value" :value="item.value" />
+                    </el-select>
+                    <el-tooltip content="存在多个关键词，将任意匹配其中之一" raw-content>
+                        <el-icon>
+                            <QuestionFilled />
+                        </el-icon>
+                    </el-tooltip>
+                </el-space>
+            </el-form-item>
+            <el-form-item label="关键词匹配模式" label-width="150">
+                <el-radio-group v-model="newTask.execCycleOption">
+                    <el-radio-button value="1">命中匹配</el-radio-button>
+                    <el-radio-button value="2">智能匹配</el-radio-button>
+                </el-radio-group>
             </el-form-item>
             <el-divider content-position="left">档案设置</el-divider>
             <el-form-item label="数据存储模式" label-width="150">
@@ -88,14 +115,14 @@
             <el-form-item label="抓取器选择" label-width="150" v-if="newTask.crawlerUseGroup==false">
                 <el-radio-group v-model="newTask.crawlerSelect">
                     <el-radio-button value="1">内置爬虫</el-radio-button>
-                    <el-radio-button value="2">headless浏览器
-                        <el-tooltip content="使用headless浏览器模式需要下载chromedriver文件到driver目录" raw-content>
-                            <el-icon>
-                                <QuestionFilled />
-                            </el-icon>
-                        </el-tooltip></el-radio-button>
+                    <el-radio-button value="2">headless浏览器</el-radio-button>
                     <el-radio-button value="3">firecrawl</el-radio-button>
                 </el-radio-group>
+                <el-tooltip content="使用headless浏览器模式需要下载chromedriver文件到driver目录" raw-content>
+                    <el-icon>
+                        <QuestionFilled />
+                    </el-icon>
+                </el-tooltip>
             </el-form-item>
             <el-form-item label="并发数" label-width="150" v-if="newTask.crawlerUseGroup==false">
                 <el-input-number v-model="newTask.crawlerConcurrency" :min="1" :max="1024" @change="handleChange" style="width: 150px" />
@@ -123,6 +150,26 @@
                 <el-space :size="8" spacer=" " wrap>
                     <el-switch v-model="newTask.crawlerIPPool" />
                     <el-tooltip content="需要先将准备好的IP列表文件放在本软件的proxyip目录下，每个IP用英文逗号隔开" raw-content>
+                        <el-icon>
+                            <QuestionFilled />
+                        </el-icon>
+                    </el-tooltip>
+                </el-space>
+            </el-form-item>
+            <el-divider content-position="left">内容抽取器设置</el-divider>
+            <el-form-item label="抽取模式" label-width="150">
+                <el-radio-group v-model="newTask.execCycleOption">
+                    <el-radio-button value="1">精准抽取</el-radio-button>
+                    <el-radio-button value="2">智能抽取</el-radio-button>
+                </el-radio-group>
+            </el-form-item>
+            <el-form-item label="抽取器API" label-width="150">
+                <el-cascader v-model="value" :options="llmOptions" @change="handleChange" style="width: 300px" />
+            </el-form-item>
+            <el-form-item label="指定模型" label-width="150">
+                <el-space :size="8" spacer=" " wrap>
+                    <el-input v-model="newTask.name" placeholder="指定模型" style="width: 300px" />
+                    <el-tooltip content="例如:gpt-4o-2024-08-06" raw-content>
                         <el-icon>
                             <QuestionFilled />
                         </el-icon>
@@ -189,6 +236,63 @@ const newTask = reactive({
     crawlerVirtualIP: true,
     crawlerIPPool: false,
 });
+
+const llmOptions = [
+    {
+        value: '1',
+        label: 'OpenAI API',
+        children: [
+            {
+                value: '101',
+                label: '我的OpenAIKey1',
+            },
+            {
+                value: '102',
+                label: '我的OpenAIKey2',
+            },
+            {
+                value: '201',
+                label: '我的通义千问Key1',
+            },
+            {
+                value: '202',
+                label: '我的千问Key2',
+            },
+        ],
+    },
+    {
+        value: '2',
+        label: 'OLlama',
+        children: [
+            {
+                value: '201',
+                label: '我的OllamaKey1',
+            },
+            {
+                value: '202',
+                label: '我的OllamaKey2',
+            },
+        ],
+    },
+    {
+        value: '3',
+        label: 'Siliconflow API',
+        children: [
+            {
+                value: '301',
+                label: '我的Sf Key1',
+            },
+            {
+                value: '302',
+                label: '我的Sf Key2',
+            },
+            {
+                value: '303',
+                label: '我的Sf Key3',
+            },
+        ],
+    },
+]
 
 const options = [
     {

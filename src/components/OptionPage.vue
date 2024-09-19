@@ -28,14 +28,14 @@
             <el-form-item label="抓取器选择" label-width="150">
                 <el-radio-group v-model="option.crawlerSelect">
                     <el-radio-button value="1">内置爬虫</el-radio-button>
-                    <el-radio-button value="2">headless浏览器
-                        <el-tooltip content="使用headless浏览器模式需要下载chromedriver文件到driver目录" raw-content>
-                            <el-icon>
-                                <QuestionFilled />
-                            </el-icon>
-                        </el-tooltip></el-radio-button>
+                    <el-radio-button value="2">headless浏览器</el-radio-button>
                     <el-radio-button value="3">firecrawl</el-radio-button>
                 </el-radio-group>
+                <el-tooltip content="使用headless浏览器模式需要下载chromedriver文件到driver目录" raw-content>
+                    <el-icon>
+                        <QuestionFilled />
+                    </el-icon>
+                </el-tooltip>
             </el-form-item>
             <el-form-item label="并发数" label-width="150">
                 <el-input-number v-model="option.crawlerConcurrency" :min="1" :max="1024" @change="handleChange" style="width: 150px" />

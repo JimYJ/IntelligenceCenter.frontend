@@ -8,7 +8,7 @@
                         <el-radio-button value="2">Ollama</el-radio-button>
                         <el-radio-button value="3">Siliconflow API</el-radio-button>
                     </el-radio-group>
-                    <el-tooltip content="OpenAI API类型包含兼容OpenAI API的各种衍生API,例如Kimi API/oobabooga/LLM Studio等" raw-content>
+                    <el-tooltip content="OpenAI API类型包含兼容OpenAI API的各种衍生API,例如Qwen API/oobabooga/LLM Studio等" raw-content>
                         <el-icon>
                             <QuestionFilled />
                         </el-icon>

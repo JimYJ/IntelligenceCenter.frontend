@@ -32,6 +32,9 @@
                 </el-table-column>
                 <el-table-column prop="name" label="Name" min-width="200" />
                 <el-table-column prop="address" label="Address" min-width="300" />
+                <el-table-column prop="" label="操作" min-width="300">
+                    <el-button type="primary" plain>重抽取</el-button>
+                </el-table-column>
             </el-table>
             <div class="pagination-block">
                 <el-pagination :page-size="12" :pager-count="curPage" layout="prev, pager, next, jumper" :total="1000" />
