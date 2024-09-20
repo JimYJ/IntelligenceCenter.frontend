@@ -4,13 +4,12 @@
             <template #breadcrumb>
                 <el-breadcrumb separator="/">
                     <el-breadcrumb-item :to="{ path: '/' }">Intelligence Center</el-breadcrumb-item>
-                    <el-breadcrumb-item><a href="./page-header.html">情报档案</a></el-breadcrumb-item>
-                    <el-breadcrumb-item>档案列表</el-breadcrumb-item>
+                    <el-breadcrumb-item>情报档案</el-breadcrumb-item>
                 </el-breadcrumb>
             </template>
             <template #content>
                 <div class="flex items-center">
-                    <span class="text-large font-600 mr-3">档案列表</span>
+                    <span class="text-large font-600 mr-3">情报档案列表</span>
                 </div>
             </template>
             <template #extra>
@@ -27,14 +26,14 @@
             <el-table :data="tableData" style="width: 100%;">
                 <el-table-column prop="date" label="档案标题" min-width="200">
                     <el-link type="primary" underline=false>
-                        <router-link :to="{ path: '/archive/detail' }">俄乌战争系列</router-link>
+                        <router-link :to="{ path: '/archive/document/list' }">俄乌战争系列</router-link>
                     </el-link>
                 </el-table-column>
                 <el-table-column prop="name" label="Name" min-width="200" />
                 <el-table-column prop="address" label="Address" min-width="300" />
                 <el-table-column prop="count" label="文档数" min-width="80" />
                 <el-table-column prop="" label="操作" min-width="300">
-                    <el-button type="primary" plain>重抽取</el-button>
+                    <el-button type="primary" plain>重提取内容</el-button>
                     <el-button type="primary" plain>下载文档内所有资源</el-button>
                 </el-table-column>
             </el-table>
@@ -131,5 +130,9 @@ const tableData = [
     display: flex;
     justify-content: center;
     align-items: center;
+}
+a:visited {
+    color: var(--el-color-primary-light-1);
+    text-decoration-color: #fff !important;
 }
 </style>

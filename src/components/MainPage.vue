@@ -22,6 +22,7 @@
         </el-aside>
         <ArchiveDetail v-if="$route.path==='/archive/detail'" />
         <ArchiveList v-if="$route.path==='/archive/list'" />
+        <ArchiveDocList v-if="$route.path==='/archive/document/list'" />
         <TaskList v-if="$route.path==='/task/list'" />
         <LlmApiList v-if="$route.path==='/api/list'" />
         <OptionPage v-model="showOption" @updateShow="showHideOption" />
@@ -34,6 +35,7 @@ import ArchiveList from './ArchiveList.vue'
 import TaskList from './TaskList.vue'
 import OptionPage from './OptionPage.vue'
 import LlmApiList from './LlmApiList.vue'
+import ArchiveDocList from './ArchiveDocList.vue'
 import { List, Document, Setting, Connection } from '@element-plus/icons-vue'
 import { ref } from 'vue'
 const showOption = ref(false)

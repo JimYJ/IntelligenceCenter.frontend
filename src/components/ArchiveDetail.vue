@@ -4,13 +4,10 @@
             <el-page-header @back="onBack">
                 <template #breadcrumb>
                     <el-breadcrumb separator="/">
-                        <el-breadcrumb-item :to="{ path: '/' }">
-                            Intelligence Center
-                        </el-breadcrumb-item>
-                        <el-breadcrumb-item>
-                            <a href="./page-header.html">情报档案</a>
-                        </el-breadcrumb-item>
-                        <el-breadcrumb-item>信息详情</el-breadcrumb-item>
+                        <el-breadcrumb-item :to="{ path: '/' }">Intelligence Center</el-breadcrumb-item>
+                        <el-breadcrumb-item :to="{ path: '/archive/list' }">情报档案</el-breadcrumb-item>
+                        <el-breadcrumb-item :to="{ path: '/archive/document/list' }">档案内容</el-breadcrumb-item>
+                        <el-breadcrumb-item>文档详情</el-breadcrumb-item>
                     </el-breadcrumb>
                 </template>
                 <template #content>
