@@ -17,7 +17,7 @@
                 <div class="flex items-center">
                     <!-- <el-button>翻译</el-button> -->
                     <!-- <el-button type="primary" class="ml-2">刷新</el-button> -->
-                    <el-input v-model="input3" placeholder="输入内容搜索" class="input-with-select">
+                    <el-input v-model="input3" placeholder="输入内容搜索档案" class="input-with-select">
                         <template #append>
                             <el-button :icon="Search" />
                         </template>
@@ -32,8 +32,10 @@
                 </el-table-column>
                 <el-table-column prop="name" label="Name" min-width="200" />
                 <el-table-column prop="address" label="Address" min-width="300" />
+                <el-table-column prop="count" label="文档数" min-width="80" />
                 <el-table-column prop="" label="操作" min-width="300">
                     <el-button type="primary" plain>重抽取</el-button>
+                    <el-button type="primary" plain>下载文档内所有资源</el-button>
                 </el-table-column>
             </el-table>
             <div class="pagination-block">
@@ -51,61 +53,73 @@ const tableData = [
     {
         date: '2016-05-03',
         name: 'Tom',
+        count: 25,
         address: 'No. 189, Grove St, Los Angeles',
     },
     {
         date: '2016-05-02',
         name: 'Tom',
+        count: 25,
         address: 'No. 189, Grove St, Los Angeles',
     },
     {
         date: '2016-05-04',
         name: 'Tom',
+        count: 25,
         address: 'No. 189, Grove St, Los Angeles',
     },
     {
         date: '2016-05-01',
         name: 'Tom',
+        count: 25,
         address: 'No. 189, Grove St, Los Angeles',
     },
     {
         date: '2016-05-04',
         name: 'Tom',
+        count: 25,
         address: 'No. 189, Grove St, Los Angeles',
     },
     {
         date: '2016-05-01',
         name: 'Tom',
+        count: 25,
         address: 'No. 189, Grove St, Los Angeles',
     },
     {
         date: '2016-05-04',
         name: 'Tom',
+        count: 25,
         address: 'No. 189, Grove St, Los Angeles',
     },
     {
         date: '2016-05-01',
         name: 'Tom',
+        count: 25,
         address: 'No. 189, Grove St, Los Angeles',
     },
     {
         date: '2016-05-04',
         name: 'Tom',
+        count: 25,
         address: 'No. 189, Grove St, Los Angeles',
     },
     {
         date: '2016-05-01',
         name: 'Tom',
+        count: 25,
         address: 'No. 189, Grove St, Los Angeles',
     },
     {
         date: '2016-05-04',
         name: 'Tom',
+        count: 25,
         address: 'No. 189, Grove St, Los Angeles',
     },
     {
         date: '2016-05-01',
         name: 'Tom',
+        count: 25,
         address: 'No. 189, Grove St, Los Angeles',
     },
 ]
