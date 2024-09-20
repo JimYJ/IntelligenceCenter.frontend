@@ -11,3 +11,22 @@ app.use(ElementPlus, {
     locale: zhCn,
   });
 app.mount('#app');
+// 以下代码解决ResizeObserver在浏览器改变大小时报错
+const debounce = (fn, delay) => {
+    let timer
+     return (...args) => {
+       if (timer) {
+         clearTimeout(timer)
+       }
+       timer = setTimeout(() => {
+         fn(...args)
+       }, delay)
+     }
+  }
+  const _ResizeObserver = window.ResizeObserver;
+  window.ResizeObserver = class ResizeObserver extends _ResizeObserver{
+     constructor(callback) {
+       callback = debounce(callback, 200);
+       super(callback);
+     }
+  }
