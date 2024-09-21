@@ -42,7 +42,7 @@
                 <div v-show="showAdvancedSettings">
                     <el-form-item label="启用匹配过滤器" label-width="150">
                         <el-space :size="8" spacer=" " wrap>
-                            <el-switch v-model="newTask.crawlerVirtualIP" />
+                            <el-switch v-model="newTask.filterEnable" />
                             <el-tooltip content="开启过滤器后，不匹配过滤器内容的网页将不会被抓取，如果某项过滤设置未填写，该项过滤将不会生效" raw-content>
                                 <el-icon>
                                     <QuestionFilled />
@@ -50,12 +50,12 @@
                             </el-tooltip>
                         </el-space>
                     </el-form-item>
-                    <el-form-item label="域名匹配" label-width="150">
-                        <el-input v-model="newTask.urlList" type="textarea" placeholder="例:www.baidu.com或baidu.com，多个网址请用英文逗号隔开，配置后只抓取匹配域名的网址" />
+                    <el-form-item label="域名匹配" label-width="150" v-if="newTask.filterEnable">
+                        <el-input v-model="newTask.filterURL" type="textarea" placeholder="例:www.baidu.com或baidu.com，多个网址请用英文逗号隔开，配置后只抓取匹配域名的网址" />
                     </el-form-item>
-                    <el-form-item label="关键词匹配" class="flex gap-8 mb-4 items-center" label-width="150">
+                    <el-form-item label="关键词匹配" class="flex gap-8 mb-4 items-center" label-width="150" v-if="newTask.filterEnable">
                         <el-space :size="8" spacer=" " wrap>
-                            <el-select v-model="keyword" multiple filterable allow-create default-first-option :reserve-keyword="false" placeholder="输入关键词并回车" style="width: 300px">
+                            <el-select v-model="newTask.filterKeyword" multiple filterable allow-create default-first-option :reserve-keyword="false" placeholder="输入关键词并回车" style="width: 300px">
                                 <el-option v-for="item in keyword" :key="item.value" :label="item.value" :value="item.value" />
                             </el-select>
                             <el-tooltip content="存在多个关键词，将任意匹配其中之一" raw-content>
@@ -65,14 +65,14 @@
                             </el-tooltip>
                         </el-space>
                     </el-form-item>
-                    <el-form-item label="关键词匹配模式" label-width="150">
+                    <el-form-item label="关键词匹配模式" label-width="150" v-if="newTask.filterEnable">
                         <el-radio-group v-model="newTask.execCycleOption">
                             <el-radio-button value="1">命中匹配</el-radio-button>
                             <el-radio-button value="2">智能匹配</el-radio-button>
                         </el-radio-group>
                     </el-form-item>
                     <el-divider content-position="left">档案设置</el-divider>
-                    <el-form-item label="数据存储模式" label-width="150">
+                    <el-form-item label="档案设置" label-width="150">
                         <el-radio-group v-model="newTask.archiveOption">
                             <el-radio-button value="1">新建档案</el-radio-button>
                             <el-radio-button value="2">选择档案</el-radio-button>
@@ -219,6 +219,9 @@ const newTask = reactive({
     execOption: "1", // 1立即开始 2周期循环
     execCycleOption: "1", // 1每日 2每周
     execTime: "",
+    filterEnable: false,
+    filterURL: "",
+    filterKeyword: [],
     archiveOption: "1",
     archiveName: "",
     archiveID: 1,

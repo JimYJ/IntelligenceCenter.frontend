@@ -28,49 +28,22 @@
                 <!-- <template #extra>
     <el-button type="primary">Operation</el-button>
   </template> -->
-                <el-descriptions-item>
-                    <template #label>
-                        <div class="cell-item">
-                            文档数
-                        </div>
-                    </template>
-                    25146
+                <el-descriptions-item label="文档数"> 25146 </el-descriptions-item>
+                <el-descriptions-item label="提取模式"> 智能提取 </el-descriptions-item>
+                <el-descriptions-item label="提取模型">
+                    <el-space :size="8" spacer="/" wrap>
+                        <el-tag size="small">OpenAI API</el-tag>
+                        <el-tag size="small">我的千问Key2</el-tag>
+                        <el-tag size="small">qwen-2.5-7b</el-tag>
+                    </el-space>
                 </el-descriptions-item>
-                <el-descriptions-item>
-                    <template #label>
-                        <div class="cell-item">
-                            提取模式
-                        </div>
-                    </template>
-                    智能提取
-                </el-descriptions-item>
-                <el-descriptions-item>
-                    <template #label>
-                        <div class="cell-item">
-                            提取模型
-                        </div>
-                    </template>
-                    <el-tag size="small">OpenAI API/我的千问Key2/qwen-2.5-7b</el-tag>
-                </el-descriptions-item>
-                <el-descriptions-item>
-                    <template #label>
-                        <div class="cell-item">
-                            活跃任务 / 关联任务
-                        </div>
-                    </template>
-                    5 / 15
-                </el-descriptions-item>
-                <el-descriptions-item>
-                    <template #label>
-                        <div class="cell-item">
-                            编辑
-                        </div>
-                    </template>
-                    <el-button size="small">修改提取方式</el-button>
-                    <el-divider direction="vertical" />
-                    <el-button size="small" type="primary">全部重新提取</el-button>
-                    <el-divider direction="vertical" />
-                    <el-button size="small" type="primary">下载全部资源</el-button>
+                <el-descriptions-item label="活跃任务 / 关联任务"> 5 / 15 </el-descriptions-item>
+                <el-descriptions-item label="编辑">
+                    <el-space :size="8" spacer=" " wrap>
+                        <el-button size="small">修改提取方式</el-button>
+                        <el-button size="small" type="primary">全部重新提取</el-button>
+                        <el-button size="small" type="primary">下载全部资源</el-button>
+                    </el-space>
                 </el-descriptions-item>
             </el-descriptions>
             <el-table :data="tableData" style="width: 100%;">
