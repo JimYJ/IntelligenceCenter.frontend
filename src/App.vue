@@ -1,15 +1,17 @@
 <template>
-    <MainPage msg="Welcome to Your Vue.js App" />
-
+    <WiseQuestions v-if="$route.path==='/'" />
+    <MainPage v-if="$route.path!='/'" />
 </template>
 
 <script>
 import MainPage from './components/MainPage.vue'
+import WiseQuestions from './components/WiseQuestions.vue'
 
 export default {
     name: 'App',
     components: {
-        MainPage: MainPage
+        MainPage: MainPage,
+        WiseQuestions: WiseQuestions
     }
 }
 </script>

@@ -35,7 +35,7 @@
                     <el-descriptions-item label="Remarks"> School </el-descriptions-item>
                     <el-descriptions-item label="来源网址"> https://element-plus.org/zh-CN/component/descriptions.html </el-descriptions-item>
                 </el-descriptions>
-                <el-row>
+                <el-row :gutter="20">
                     <el-col :span="20">
                         <div class="grid-content ep-bg-purple">
                             <p class="mt-4 text-sm">

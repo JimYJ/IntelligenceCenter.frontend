@@ -3,8 +3,11 @@
         <el-aside width="210px" class="main-menu">
             <el-menu :router="true">
                 <img alt="logo" width="200px" height="46px" src="../assets/logo.png">
+                <el-menu-item index="/"><el-icon>
+                        <ChatRound />
+                    </el-icon><el-text class="mx-1" type="primary" size="large" tag="b">智问</el-text></el-menu-item>
                 <el-menu-item index="/task/list"><el-icon>
-                        <List />
+                        <DocumentAdd />
                     </el-icon>抓取任务</el-menu-item>
                 <el-menu-item index="/archive/list">
                     <el-icon>
@@ -36,7 +39,7 @@ import TaskList from './TaskList.vue'
 import OptionPage from './OptionPage.vue'
 import LlmApiList from './LlmApiList.vue'
 import ArchiveDocList from './ArchiveDocList.vue'
-import { List, Document, Setting, Connection } from '@element-plus/icons-vue'
+import { DocumentAdd, Document, Setting, Connection, ChatRound } from '@element-plus/icons-vue'
 import { ref } from 'vue'
 const showOption = ref(false)
 
