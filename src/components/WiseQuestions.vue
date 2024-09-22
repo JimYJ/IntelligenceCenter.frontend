@@ -27,13 +27,14 @@ const textarea = ref('')
 .box {
     position: fixed;
     bottom: 30px;
-    left: 25%;
-    right: 25%;
+    left: 50%; /* 将元素的左边缘设置为视口宽度的50% */
+    transform: translate(-50%);
     background-color: #f3f5fc !important;
     border-radius: 15px;
     padding: 6px !important;
     width: 800px;
     border: 1px solid #e2e2e2;
+    height: 120px;
 }
 div /deep/ .el-textarea__inner {
     background-color: #f3f5fc !important;
