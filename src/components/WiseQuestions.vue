@@ -28,7 +28,7 @@ const textarea = ref('')
     position: fixed;
     bottom: 30px;
     left: 30%;
-    right: 50%;
+    right: 30%;
     background-color: #f3f5fc !important;
     border-radius: 15px;
     padding: 6px !important;
@@ -46,7 +46,7 @@ div /deep/ .el-textarea__inner:hover {
     box-shadow: none;
 }
 .body {
-    width: 100%;
+    width: 99%;
 }
 div /deep/ .el-textarea__inner::-webkit-scrollbar {
     width: 6px;
