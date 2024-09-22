@@ -27,8 +27,8 @@ const textarea = ref('')
 .box {
     position: fixed;
     bottom: 30px;
-    left: 30%;
-    right: 30%;
+    left: 25%;
+    right: 25%;
     background-color: #f3f5fc !important;
     border-radius: 15px;
     padding: 6px !important;
