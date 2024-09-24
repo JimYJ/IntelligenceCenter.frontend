@@ -12,7 +12,7 @@
                         </el-col>
                         <el-col :span="6" style="text-align: right;">
                             <el-icon :size="iconSize" class="icon">
-                                <Paperclip />
+                                <Paperclip @click="showCode" />
                             </el-icon>
                         </el-col>
                     </el-row>
@@ -49,48 +49,20 @@
             </el-tooltip>
         </el-space>
     </el-card>
-    <div class="wxchatBorderRightMid">
-        <div style="margin-left: 30px;margin-top: 15px;">
-            <el-row>
-                <el-col :span="1" :pull="1">
-                    <el-avatar shape="square" :src="bot" style="width: 35px;height: 35px;"></el-avatar>
-                </el-col>
-                <el-col :span="20" :pull="1">
-                    <div class="chatPop1">
-                        <span style="line-height: 23px;">你好文本属性来选择属性来选择属性来选择属性性来选择属性来选择属性性来选择属性来选择属性性来选择属性来选择属性性来选择属性来选择属性性来选择属性来选择属性性来选择属性来选择属性性来选择属性来选择属性性来选择属性来选择属性性来选择属性来选择属性性来选择属性来选择属性性来选择属性来选择属性性来选择属性来选择属性性来选择属性来选择属性性来选择属性来选择属性性来选择属性来选择属性性来选择属性来选择属性性来选择属性来选择属性性来选择属性来选择属性性来选择属性来选择属性性来选择属性来选择属性性来选择属性来选择属性性来选择属性来选择属性</span>
-                    </div>
-                </el-col>
-            </el-row>
-        </div>
-        <div style="margin-left: 30px;margin-top: 15px;">
-            <el-row>
-                <el-col :span="20">
-                    <div class="chatPop2" :push="3">
-                        <span style="line-height: 23px;">你好文本属性来选择属性来选择属性来选择属性来选择属性来选择属性来性来选择属性来选择属性性来选择属性来选择属性性来选择属性来选择属性性来选择属性来选择属性性来选择属性来选择属性性来选择属性来选择属性性来选择属性来选择属性性来选择属性来选择属性性来选择属性来选择属性性来选择属性来选择属性性来选择属性来选择属性性来选择属性来选择属性性来选择属性来选择属性性来选择属性来选择属性性来选择属性来选择属性性来选择属性来选择属性性来选择属性来选择属性性来选择属性来选择属性性来选择属性来选择属性性来选择属性来选择属性性来选择属性来选择属性性来选择属性来选择属性性来选择属性来选择属性性来选择属性来选择属性性来选择属性来选择属性性来选择属性来选择属性性来选择属性来选择属性性来选择属性来选择属性性来选择属性来选择属性性来选择属性来选择属性</span>
-                    </div>
-                </el-col>
-                <el-col :span="1">
-                    <el-avatar shape="square" :src="squareUrl" style="width: 35px;height: 35px;"></el-avatar>
-                </el-col>
-            </el-row>
-        </div>
-        <div style="margin-left: 30px;margin-top: 15px;">
-            <el-row>
-                <el-col :span="1" :pull="1">
-                    <el-avatar shape="square" :src="bot" style="width: 35px;height: 35px;"></el-avatar>
-                </el-col>
-                <el-col :span="20" :pull="1">
-                    <div class="chatPop1">
-                        <span style="line-height: 23px;">你好文本属性来选择属性来选择属性来选择属性性来选择属性来选择属性性来选择属性来选择属性性来选择属性来选择属性性来选择属性来选择属性性来选择属性来选择属性性来选择属性来选择属性性来选择属性来选择属性性来选择属性来选择属性性来选择属性来选择属性性来选择属性来选择属性性来选择属性来选择属性性来选择属性来选择属性性来选择属性来选择属性性来选择属性来选择属性性来选择属性来选择属性性来选择属性来选择属性性来选择属性来选择属性性来选择属性来选择属性性来选择属性来选择属性性来选择属性来选择属性性来选择属性来选择属性性来选择属性来选择属性</span>
-                    </div>
-                </el-col>
-            </el-row>
-        </div>
+    <div class="chatPop1">
+        <MarkdownHighlighter :markdownText="markdown" />
+    </div>
+    <div class="chatPop2">
+        <MarkdownHighlighter :markdownText="markdown" />
+    </div>
+    <div class="chatPop1">
+        <MarkdownHighlighter :markdownText="markdown" />
     </div>
 </template>
 
 <script  setup>
 import { Clock, ChatDotRound, ChatRound, Collection, Paperclip } from '@element-plus/icons-vue'
+import MarkdownHighlighter from './MarkdownHighlighter.vue';
 import { ref } from 'vue'
 const textarea = ref('')
 
@@ -101,8 +73,18 @@ const options = ref({
     useArchive: false,
 })
 
-const bot = "../assets/logo1.png"
+let markdown = ref('# 这是标题')
 
+const showCode = () => {
+    markdown.value = `
+# 这是标题
+\`\`\`HTML
+<el-icon :size="iconSize" class="icon">
+    <ChatRound />
+</el-icon>
+\`\`\`
+`
+};
 </script>
 
 <style scoped>
@@ -172,17 +154,17 @@ div /deep/ .el-card__body {
     /* background-color: #c6c8eb; */
 }
 
-.chatPop1 span {
+.chatPop1 {
     background-color: #e8e9f8;
     padding: 5px 8px;
     display: inline-block;
     border-radius: 10px;
     margin: 0px 0 10px 10px;
-    position: relative;
-    float: left;
+    /* position: relative;
+    float: left; */
     font-size: small;
     text-align: left;
-    max-width: 800px;
+    width: 800px;
 }
 
 .chatPop1 span::after {
@@ -193,21 +175,22 @@ div /deep/ .el-card__body {
 }
 
 .chatPop2 :hover {
-    background-color: var(--el-color-primary);
+    /* background-color: var(--el-color-primary); */
 }
 
-.chatPop2 span {
-    background-color: var(--el-color-primary);
+.chatPop2 {
+    /* background-color: var(--el-color-primary); */
     padding: 5px 8px;
     display: inline-block;
     border-radius: 10px;
     margin: 0px 5px 10px 10px;
-    position: relative;
+    /* position: relative; */
     text-align: left;
     float: right;
-    color: #fff;
+    /* color: #fff; */
     font-size: small;
-    max-width: 800px;
+    width: 800px;
+    background-color: var(--el-color-primary) !important;
 }
 
 .chatPop2 span::after {
@@ -230,4 +213,3 @@ div /deep/ .el-card__body {
     transform: translate(-50%);
 }
 </style>
-
