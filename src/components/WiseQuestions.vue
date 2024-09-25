@@ -73,7 +73,7 @@ const options = ref({
     useArchive: false,
 })
 
-let markdown = ref('# 这是标题')
+const markdown = ref('# 这是标题')
 
 const showCode = () => {
     markdown.value = `
