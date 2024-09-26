@@ -156,6 +156,7 @@ div /deep/ .el-card__body {
 
 .chatPop1 {
     background-color: #e8e9f8;
+    /* background-color: var(--el-color-success-light-5); */
     padding: 5px 8px;
     display: inline-block;
     border-radius: 10px;
@@ -190,7 +191,7 @@ div /deep/ .el-card__body {
     /* color: #fff; */
     font-size: small;
     width: 800px;
-    background-color: var(--el-color-primary) !important;
+    background-color: var(--el-color-primary-light-7);
 }
 
 .chatPop2 span::after {
