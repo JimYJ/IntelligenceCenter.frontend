@@ -76,7 +76,7 @@ const options = ref({
 const markdown = ref('# 这是标题')
 
 const showCode = () => {
-    markdown.value = `
+    markdown.value += `
 # 这是标题
 \`\`\`HTML
 <el-icon :size="iconSize" class="icon">

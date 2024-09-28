@@ -20,7 +20,6 @@ export default {
     },
     setup(props) {
         const renderedMarkdown = ref('');
-
         // 复制到剪贴板的方法
         const copyToClipboard = (code) => {
             navigator.clipboard.writeText(code).then(() => {
@@ -45,7 +44,7 @@ export default {
                         const copyButton = document.createElement('div');
                         copyButton.innerText = '复制代码';
                         copyButton.className = "copy-button";
-                        copyButton.style = "color: #2a598a;width :100%;text-align: right;cursor: pointer; "
+                        // copyButton.style = "color: #2a598a;width :100%;text-align: right;cursor: pointer; "
                         copyButton.onclick = () => {
                             copyToClipboard(code);
                         };
@@ -62,7 +61,6 @@ export default {
 
         // 初始化时添加复制按钮
         addCopyButtons();
-
         return {
             renderedMarkdown,
             addCopyButtons, // 暴露 addCopyButtons 方法
@@ -91,18 +89,19 @@ function highlightCode(el) {
 export { highlightDirective };
 </script>
 
-<style scoped>
+<style>
 .copy-button {
-    background-color: #007bff; /* 按钮背景颜色 */
-    color: white; /* 字体颜色 */
+    background-color: #e5eaf3; /* 按钮背景颜色 */
+    color: var(--el-color-info-light-4); /* 字体颜色 */
     border: none; /* 无边框 */
-    padding: 5px 10px; /* 内边距 */
-    border-radius: 3px; /* 圆角 */
+    padding: 5px; /* 内边距 */
+    border-radius: 5px 5px 0 0; /* 圆角 */
     cursor: pointer; /* 鼠标样式 */
-    margin-bottom: 5px; /* 底部间距 */
+    text-align: right;
+    font-family: Avenir, Helvetica, Arial, sans-serif;
 }
 
 .copy-button:hover {
-    background-color: #0056b3; /* 悬停时背景颜色 */
+    color: var(--el-color-info-light-3);
 }
 </style>
