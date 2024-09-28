@@ -14,6 +14,9 @@
                             <el-icon :size="iconSize" class="icon">
                                 <Paperclip @click="showCode" />
                             </el-icon>
+                            <el-icon :size="iconSize" class="icon">
+                                <ChatDotRound @click="showCode2" />
+                            </el-icon>
                         </el-col>
                     </el-row>
                 </div>
@@ -49,7 +52,7 @@
             </el-tooltip>
         </el-space>
     </el-card>
-    <div class="chatPop1">
+    <!-- <div class="chatPop1">
         <MarkdownHighlighter :markdownText="markdown" />
     </div>
     <div class="chatPop2">
@@ -57,6 +60,11 @@
     </div>
     <div class="chatPop1">
         <MarkdownHighlighter :markdownText="markdown" />
+    </div> -->
+    <div v-for="(markdownItem, index) in markdownList" :key="index">
+        <div :class=markdownItem.className>
+            <MarkdownHighlighter :markdownText="markdownItem.content" />
+        </div>
     </div>
 </template>
 
@@ -73,10 +81,8 @@ const options = ref({
     useArchive: false,
 })
 
-const markdown = ref('# 这是标题')
-
-const showCode = () => {
-    markdown.value += `
+const markdownList = ref([])
+let a = `
 # 这是标题
 \`\`\`HTML
 <el-icon :size="iconSize" class="icon">
@@ -84,7 +90,22 @@ const showCode = () => {
 </el-icon>
 \`\`\`
 `
-};
+const showCode = () => {
+    let b = {
+        className: "",
+        content: a,
+    }
+    b.className = "chatPop1"
+    markdownList.value.push(b)
+}
+const showCode2 = () => {
+    let b = {
+        className: "",
+        content: a,
+    }
+    b.className = "chatPop2"
+    markdownList.value.push(b)
+}
 </script>
 
 <style scoped>
@@ -187,7 +208,7 @@ div /deep/ .el-card__body {
     margin: 0px 5px 10px 10px;
     /* position: relative; */
     text-align: left;
-    float: right;
+    /* float: right; */
     /* color: #fff; */
     font-size: small;
     width: 800px;
