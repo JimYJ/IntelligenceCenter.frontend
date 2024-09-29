@@ -52,18 +52,11 @@
             </el-tooltip>
         </el-space>
     </el-card>
-    <!-- <div class="chatPop1">
-        <MarkdownHighlighter :markdownText="markdown" />
-    </div>
-    <div class="chatPop2">
-        <MarkdownHighlighter :markdownText="markdown" />
-    </div>
-    <div class="chatPop1">
-        <MarkdownHighlighter :markdownText="markdown" />
-    </div> -->
-    <div v-for="(markdownItem, index) in markdownList" :key="index">
-        <div :class=markdownItem.className>
-            <MarkdownHighlighter :markdownText="markdownItem.content" />
+    <div class="chatbox">
+        <div v-for="(markdownItem, index) in markdownList" :key="index">
+            <div :class=markdownItem.className>
+                <MarkdownHighlighter :markdownText="markdownItem.content" />
+            </div>
         </div>
     </div>
 </template>
@@ -97,7 +90,7 @@ const showCode = () => {
         className: "",
         content: a,
     }
-    b.className = "chatPop1"
+    b.className = "chatPopBot"
     markdownList.value.push(b)
 }
 const showCode2 = () => {
@@ -105,12 +98,29 @@ const showCode2 = () => {
         className: "",
         content: a,
     }
-    b.className = "chatPop2"
+    b.className = "chatPopUser"
     markdownList.value.push(b)
 }
 </script>
 
 <style scoped>
+.chatbox {
+    position: fixed;
+    top: 10px; /* 上沿贴顶 */
+    bottom: 180px;
+    width: 850px;
+    left: 50%; /* 将元素的左边缘设置为视口宽度的50% */
+    transform: translate(-50%);
+    overflow-y: auto; /* 在y轴上允许滚动 */
+}
+.chatbox::-webkit-scrollbar {
+    display: none; /* 隐藏 Chrome 和 Safari 的滚动条 */
+}
+
+.chatbox {
+    -ms-overflow-style: none; /* 隐藏 IE 和 Edge 的滚动条 */
+    scrollbar-width: none; /* 隐藏 Firefox 的滚动条 */
+}
 .box {
     position: fixed;
     bottom: 30px;
@@ -173,11 +183,11 @@ div /deep/ .el-card__body {
     transform: scale(1.2);
 }
 
-.chatPop1 :hover {
-    /* background-color: #c6c8eb; */
-}
+/*.chatPopbot :hover {
+    background-color: #c6c8eb; 
+}*/
 
-.chatPop1 {
+.chatPopBot {
     background-color: #e8e9f8;
     /* background-color: var(--el-color-success-light-5); */
     padding: 5px 8px;
@@ -191,18 +201,18 @@ div /deep/ .el-card__body {
     width: 800px;
 }
 
-.chatPop1 span::after {
+.chatPopBot span::after {
     content: "";
     position: absolute;
     top: 8px;
     left: -16px;
 }
 
-.chatPop2 :hover {
-    /* background-color: var(--el-color-primary); */
-}
+/*.chatPopUser :hover {
+   background-color: var(--el-color-primary); 
+}*/
 
-.chatPop2 {
+.chatPopUser {
     /* background-color: var(--el-color-primary); */
     padding: 5px 8px;
     display: inline-block;
@@ -217,7 +227,7 @@ div /deep/ .el-card__body {
     background-color: var(--el-color-primary-light-7);
 }
 
-.chatPop2 span::after {
+.chatPopUser span::after {
     content: "";
     position: absolute;
     top: 8px;
