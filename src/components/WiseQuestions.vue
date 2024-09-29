@@ -6,7 +6,7 @@
                     <el-input resize="none" v-model="textarea" :rows="4" type="textarea" placeholder="输入你想要的内容" />
                     <el-row class="row-bg" justify="space-between">
                         <el-col :span="6" style="text-align: left;">
-                            <el-text class="mx-1" size="small">对档案提问:</el-text><el-switch v-model="options.useArchive" size="small" />
+                            <el-button type="primary" round size="small">对档案提问</el-button>
                         </el-col>
                         <el-col :span="12">
                         </el-col>
@@ -59,6 +59,16 @@
             </div>
         </div>
     </div>
+    <el-card class="file-list">
+        <template #header>
+            <div class="card-header">
+                <span>附加信息列表</span>
+            </div>
+        </template>
+        <div class="item-list">
+            <p v-for="o in 50" :key="o" class="text item">{{ 'List item ' + o }}</p>
+        </div>
+    </el-card>
 </template>
 
 <script  setup>
@@ -69,10 +79,10 @@ const textarea = ref('')
 
 const iconSize = 25
 
-const options = ref({
-    useInternet: true,
-    useArchive: false,
-})
+// const options = ref({
+//     useInternet: true,
+//     useArchive: false,
+// })
 
 const markdownList = ref([])
 let a = `
@@ -104,6 +114,19 @@ const showCode2 = () => {
 </script>
 
 <style scoped>
+.file-list {
+    position: fixed;
+    top: 80px;
+    right: 110px;
+    width: 350px;
+    bottom: 80px;
+    overflow-y: auto; /* 在y轴上允许滚动 */
+    -ms-overflow-style: none; /* 隐藏 IE 和 Edge 的滚动条 */
+    scrollbar-width: none; /* 隐藏 Firefox 的滚动条 */
+}
+.file-list::-webkit-scrollbar {
+    display: none; /* 隐藏 Chrome 和 Safari 的滚动条 */
+}
 .chatbox {
     position: fixed;
     top: 10px; /* 上沿贴顶 */
@@ -112,15 +135,13 @@ const showCode2 = () => {
     left: 50%; /* 将元素的左边缘设置为视口宽度的50% */
     transform: translate(-50%);
     overflow-y: auto; /* 在y轴上允许滚动 */
+    -ms-overflow-style: none; /* 隐藏 IE 和 Edge 的滚动条 */
+    scrollbar-width: none; /* 隐藏 Firefox 的滚动条 */
 }
 .chatbox::-webkit-scrollbar {
     display: none; /* 隐藏 Chrome 和 Safari 的滚动条 */
 }
 
-.chatbox {
-    -ms-overflow-style: none; /* 隐藏 IE 和 Edge 的滚动条 */
-    scrollbar-width: none; /* 隐藏 Firefox 的滚动条 */
-}
 .box {
     position: fixed;
     bottom: 30px;
