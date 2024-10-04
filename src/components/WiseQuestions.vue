@@ -59,22 +59,38 @@
             </div>
         </div>
     </div>
-    <el-card class="file-list">
-        <template #header>
-            <div class="card-header">
-                <span>附加信息列表</span>
-            </div>
-        </template>
-        <div class="item-list">
-            <p v-for="o in 50" :key="o" class="text item">{{ 'List item ' + o }}</p>
+
+    <div class="info-body">
+        <!-- <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
+            <el-menu-item index="1">Processing Center</el-menu-item>
+            <el-sub-menu index="2">
+                <template #title>Workspace</template>
+                <el-menu-item index="2-1">item one</el-menu-item>
+                <el-menu-item index="2-2">item two</el-menu-item>
+                <el-menu-item index="2-3">item three</el-menu-item>
+                <el-sub-menu index="2-4">
+                    <template #title>item four</template>
+                    <el-menu-item index="2-4-1">item one</el-menu-item>
+                    <el-menu-item index="2-4-2">item two</el-menu-item>
+                    <el-menu-item index="2-4-3">item three</el-menu-item>
+                </el-sub-menu>
+            </el-sub-menu>
+            <el-menu-item index="3" disabled>Info</el-menu-item>
+            <el-menu-item index="4">Orders</el-menu-item>
+        </el-menu> -->
+        <div class="mind-map" ref="mindMapRef">
         </div>
-    </el-card>
+        <div class="file-list">
+            <p v-for="o in 50" :key="o" class="text item">{{ 'List item horizontal handleSelect 在这个例子中，我们使用了两个事件监听器@mouseover和@mouseleave来分别处理鼠标悬停和离开事件。hovered数据属性用于追踪鼠标是否悬停在元素上。计算属性hoverStyle根据hovered的值动态返回样式对象。当鼠标悬停在div元素上时，hovered变为true，计算属性hoverStyle返回的样式会使背景颜色变为#f0f0f0。当鼠标离开时，hovered变为false，背景颜色变回透明。这种方法可以模拟hover样式的效果，但需要使用JavaScript来处理鼠标事件。如果你希望更接近CSS的:hover行为，这种方法是可行的。' + o }}</p>
+        </div>
+    </div>
 </template>
 
 <script  setup>
 import { Clock, ChatDotRound, ChatRound, Collection, Paperclip } from '@element-plus/icons-vue'
 import MarkdownHighlighter from './MarkdownHighlighter.vue';
-import { ref } from 'vue'
+import MindMap from "simple-mind-map"
+import { onMounted, ref } from 'vue'
 const textarea = ref('')
 
 const iconSize = 25
@@ -111,29 +127,98 @@ const showCode2 = () => {
     b.className = "chatPopUser"
     markdownList.value.push(b)
 }
+const mindMapRef = ref()
+let mindMap = null;
+const mindData = {
+    "data": {
+        "text": "根节点"
+    },
+    "children": [{
+        "data": {
+            "text": "子节点1"
+        }
+    },
+    {
+        "data": {
+            "text": "子节点2"
+        }
+    },
+    {
+        "data": {
+            "text": "子节点3"
+        }
+    },
+    {
+        "data": {
+            "text": "子节点4"
+        }
+    },
+    {
+        "data": {
+            "text": "子节点5"
+        }
+    }]
+}
+async function init() {
+    mindMap = new MindMap({
+        el: mindMapRef.value,
+        data: mindData,
+    });
+    mindMap.on("node_click", hide)
+}
+onMounted(
+    async () => {
+        init()
+    }
+)
+
+const hide = () => {
+
+}
 </script>
 
 <style scoped>
-.file-list {
+.mind-map {
+    border-radius: 15px;
+    background-color: #f3f5fc;
+    width: 100%;
+    height: 300px;
+}
+.info-body {
+    background-color: #f3f5fc;
     position: fixed;
-    top: 80px;
-    right: 110px;
-    width: 350px;
-    bottom: 80px;
+    top: 0;
+    left: 950px;
+    right: 20px;
+    /* border-left: 1px solid #f6f3f3; */
+}
+.file-list {
+    color: #565656;
+    height: 87vh;
+    padding: 5px 10px;
     overflow-y: auto; /* 在y轴上允许滚动 */
-    -ms-overflow-style: none; /* 隐藏 IE 和 Edge 的滚动条 */
-    scrollbar-width: none; /* 隐藏 Firefox 的滚动条 */
+}
+.file-list::-webkit-scrollbar-thumb {
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    background-color: #e2e2e2;
+}
+.file-list::-webkit-scrollbar-track {
+    background-color: transparent;
 }
 .file-list::-webkit-scrollbar {
-    display: none; /* 隐藏 Chrome 和 Safari 的滚动条 */
+    width: 6px;
+    height: 6px;
 }
 .chatbox {
     position: fixed;
     top: 10px; /* 上沿贴顶 */
     bottom: 180px;
     width: 850px;
-    left: 50%; /* 将元素的左边缘设置为视口宽度的50% */
-    transform: translate(-50%);
+    /* left: 50%; /* 将元素的左边缘设置为视口宽度的50% 
+    transform: translate(-50%); */
+    left: 90px;
     overflow-y: auto; /* 在y轴上允许滚动 */
     -ms-overflow-style: none; /* 隐藏 IE 和 Edge 的滚动条 */
     scrollbar-width: none; /* 隐藏 Firefox 的滚动条 */
@@ -145,8 +230,9 @@ const showCode2 = () => {
 .box {
     position: fixed;
     bottom: 30px;
-    left: 50%; /* 将元素的左边缘设置为视口宽度的50% */
-    transform: translate(-50%);
+    /* left: 50%; /* 将元素的左边缘设置为视口宽度的50% 
+    transform: translate(-50%); */
+    left: 110px;
     background-color: #f3f5fc !important;
     border-radius: 15px;
     padding: 6px !important;
@@ -185,7 +271,7 @@ div /deep/ .el-textarea__inner::-webkit-scrollbar-track {
 .affix {
     position: fixed;
     top: 30%;
-    right: 20px;
+    left: 20px;
 }
 
 div /deep/ .el-card__body {
