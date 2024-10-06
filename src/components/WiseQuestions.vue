@@ -182,7 +182,7 @@ const newMindMap = () => {
     mindMap = new MindMap({
         el: mindMapRef.value,
         data: mindData,
-        theme: "classic2",
+        theme: "blueSky",
         readonly: true,
         initRootNodePosition: ['10%', '50%'],
         fit: true,
