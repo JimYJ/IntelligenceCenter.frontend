@@ -1,8 +1,15 @@
 <template class="body">
-    <div class="body">
+    <div class="chatbox" :class="smartMode?'chatbox-left':'chatbox-center'">
+        <div v-for="(markdownItem, index) in markdownList" :key="index">
+            <div :class=markdownItem.className>
+                <MarkdownHighlighter :markdownText="markdownItem.content" />
+            </div>
+        </div>
+    </div>
+    <transition name="slide">
         <el-row :gutter="20" justify="center">
             <el-col :span="24" style="min-height: 300px;">
-                <div class="box">
+                <div class="box" :class="smartMode?'box-left':'box-center'">
                     <el-input resize="none" v-model="textarea" :rows="4" type="textarea" placeholder="输入你想要的内容" />
                     <el-row class="row-bg" justify="space-between">
                         <el-col :span="6" style="text-align: left;">
@@ -22,19 +29,19 @@
                 </div>
             </el-col>
         </el-row>
-    </div>
+    </transition>
     <el-card style="max-width: 80px" class="affix">
         <img alt="logo" width="50px" height="50px" src="../assets/logo1.png">
         <el-divider />
         <el-space :size="12" spacer=" " wrap direction="vertical">
             <el-tooltip class="box-item" effect="dark" content="开启新会话" placement="left-end">
                 <el-icon :size="iconSize" class="icon">
-                    <ChatRound />
+                    <ChatRound @click="enableNormalMode" />
                 </el-icon>
             </el-tooltip>
             <el-tooltip class="box-item" effect="dark" content="开启新智问会话" placement="left-end">
                 <el-icon :size="iconSize" class="icon">
-                    <ChatDotRound />
+                    <ChatDotRound @click="enableSmartMode" />
                 </el-icon>
             </el-tooltip>
             <el-tooltip class="box-item" effect="dark" content="查看历史会话" placement="left-end">
@@ -52,16 +59,9 @@
             </el-tooltip>
         </el-space>
     </el-card>
-    <div class="chatbox">
-        <div v-for="(markdownItem, index) in markdownList" :key="index">
-            <div :class=markdownItem.className>
-                <MarkdownHighlighter :markdownText="markdownItem.content" />
-            </div>
-        </div>
-    </div>
-
-    <div class="info-body">
-        <!-- <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
+    <transition name="el-fade-in-linear">
+        <div class="info-body" v-show="smartMode">
+            <!-- <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
             <el-menu-item index="1">Processing Center</el-menu-item>
             <el-sub-menu index="2">
                 <template #title>Workspace</template>
@@ -78,19 +78,20 @@
             <el-menu-item index="3" disabled>Info</el-menu-item>
             <el-menu-item index="4">Orders</el-menu-item>
         </el-menu> -->
-        <div class="mind-map" ref="mindMapRef">
+            <div class="mind-map" ref="mindMapRef">
+            </div>
+            <div class="file-list">
+                <p v-for="o in 50" :key="o" class="text item">{{ 'List item horizontal handleSelect 在这个例子中，我们使用了两个事件监听器@mouseover和@mouseleave来分别处理鼠标悬停和离开事件。hovered数据属性用于追踪鼠标是否悬停在元素上。计算属性hoverStyle根据hovered的值动态返回样式对象。当鼠标悬停在div元素上时，hovered变为true，计算属性hoverStyle返回的样式会使背景颜色变为#f0f0f0。当鼠标离开时，hovered变为false，背景颜色变回透明。这种方法可以模拟hover样式的效果，但需要使用JavaScript来处理鼠标事件。如果你希望更接近CSS的:hover行为，这种方法是可行的。' + o }}</p>
+            </div>
         </div>
-        <div class="file-list">
-            <p v-for="o in 50" :key="o" class="text item">{{ 'List item horizontal handleSelect 在这个例子中，我们使用了两个事件监听器@mouseover和@mouseleave来分别处理鼠标悬停和离开事件。hovered数据属性用于追踪鼠标是否悬停在元素上。计算属性hoverStyle根据hovered的值动态返回样式对象。当鼠标悬停在div元素上时，hovered变为true，计算属性hoverStyle返回的样式会使背景颜色变为#f0f0f0。当鼠标离开时，hovered变为false，背景颜色变回透明。这种方法可以模拟hover样式的效果，但需要使用JavaScript来处理鼠标事件。如果你希望更接近CSS的:hover行为，这种方法是可行的。' + o }}</p>
-        </div>
-    </div>
+    </transition>
 </template>
 
 <script  setup>
 import { Clock, ChatDotRound, ChatRound, Collection, Paperclip } from '@element-plus/icons-vue'
 import MarkdownHighlighter from './MarkdownHighlighter.vue';
 import MindMap from "simple-mind-map"
-import { onMounted, ref } from 'vue'
+import { nextTick, ref } from 'vue'
 const textarea = ref('')
 
 const iconSize = 25
@@ -111,6 +112,23 @@ let a = `
 
 ### sdgfsdf
 `
+let smartMode = ref(false)
+let mindMap = null;
+const enableSmartMode = async () => {
+    smartMode.value = true;
+    await nextTick();
+    if (mindMap == null) {
+        newMindMap();
+    }
+}
+
+const enableNormalMode = async () => {
+    smartMode.value = false;
+    if (mindMap != null) {
+        mindMap.destroy()
+    }
+    mindMap = null;
+}
 const showCode = () => {
     let b = {
         className: "",
@@ -128,7 +146,7 @@ const showCode2 = () => {
     markdownList.value.push(b)
 }
 const mindMapRef = ref()
-let mindMap = null;
+
 const mindData = {
     "data": {
         "text": "根节点"
@@ -159,18 +177,21 @@ const mindData = {
         }
     }]
 }
-async function init() {
+
+const newMindMap = () => {
     mindMap = new MindMap({
         el: mindMapRef.value,
         data: mindData,
+        theme: "classic2",
+        readonly: true,
+        initRootNodePosition: ['10%', '50%'],
+        fit: true,
+        mousewheelAction: "zoom"
     });
     mindMap.on("node_click", hide)
+    console.log(mindMap.d)
 }
-onMounted(
-    async () => {
-        init()
-    }
-)
+
 
 const hide = () => {
 
@@ -182,7 +203,7 @@ const hide = () => {
     border-radius: 15px;
     background-color: #f3f5fc;
     width: 100%;
-    height: 300px;
+    height: 30vh;
 }
 .info-body {
     background-color: #f3f5fc;
@@ -190,11 +211,12 @@ const hide = () => {
     top: 0;
     left: 950px;
     right: 20px;
+    max-width: 800px;
     /* border-left: 1px solid #f6f3f3; */
 }
 .file-list {
     color: #565656;
-    height: 87vh;
+    height: 67vh;
     padding: 5px 10px;
     overflow-y: auto; /* 在y轴上允许滚动 */
 }
@@ -226,13 +248,21 @@ const hide = () => {
 .chatbox::-webkit-scrollbar {
     display: none; /* 隐藏 Chrome 和 Safari 的滚动条 */
 }
+.chatbox-left {
+    left: 90px;
+}
+
+.chatbox-center {
+    left: 50%;
+    transform: translate(-50%);
+}
 
 .box {
     position: fixed;
     bottom: 30px;
     /* left: 50%; /* 将元素的左边缘设置为视口宽度的50% 
     transform: translate(-50%); */
-    left: 110px;
+    /* left: 110px; */
     background-color: #f3f5fc !important;
     border-radius: 15px;
     padding: 6px !important;
@@ -240,6 +270,16 @@ const hide = () => {
     border: 1px solid #e2e2e2;
     height: 120px;
 }
+
+.box-left {
+    left: 110px;
+}
+
+.box-center {
+    left: 50%;
+    transform: translate(-50%);
+}
+
 div /deep/ .el-textarea__inner {
     background-color: #f3f5fc !important;
     border-radius: 15px;
