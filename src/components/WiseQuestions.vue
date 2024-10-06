@@ -209,7 +209,8 @@ const hide = () => {
     background-color: #f3f5fc;
     position: fixed;
     top: 0;
-    left: 950px;
+    left: 50%;
+    transform: translate(calc(-50% + 420px));
     right: 20px;
     max-width: 800px;
     /* border-left: 1px solid #f6f3f3; */
@@ -249,7 +250,9 @@ const hide = () => {
     display: none; /* 隐藏 Chrome 和 Safari 的滚动条 */
 }
 .chatbox-left {
-    left: 90px;
+    /* left: 90px; */
+    left: 50%;
+    transform: translate(calc(-50% - 420px));
 }
 
 .chatbox-center {
@@ -272,7 +275,9 @@ const hide = () => {
 }
 
 .box-left {
-    left: 110px;
+    /* left: 110px; */
+    left: 50%;
+    transform: translate(calc(-50% - 420px));
 }
 
 .box-center {
