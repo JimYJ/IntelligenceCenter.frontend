@@ -12,10 +12,15 @@
                 <div class="box" :class="smartMode?'box-left':'box-center'">
                     <el-input resize="none" v-model="textarea" :rows="4" type="textarea" placeholder="输入你想要的内容" />
                     <el-row class="row-bg" justify="space-between">
-                        <el-col :span="6" style="text-align: left;">
-                            <el-button type="primary" round size="small">对档案提问</el-button>
+                        <el-col :span="2" style="text-align: left;">
+                            <el-switch v-model="useArchive" class="ml-2" width="50" inline-prompt active-text="启用" inactive-text="禁用" />
                         </el-col>
-                        <el-col :span="12">
+                        <el-col :span="10" style="text-align: left;">
+                            <el-select v-model="value3" multiple collapse-tags collapse-tags-tooltip placeholder="选择档案库" style="width: 180px" :disabled="!useArchive">
+                                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
+                            </el-select>
+                        </el-col>
+                        <el-col :span="6">
                         </el-col>
                         <el-col :span="6" style="text-align: right;">
                             <el-icon :size="iconSize" class="icon">
@@ -146,6 +151,24 @@ const showCode2 = () => {
     markdownList.value.push(b)
 }
 const mindMapRef = ref()
+
+//档案选择器
+let useArchive = ref(false)
+const value3 = ref([])
+const options = [
+    {
+        value: 'Option1',
+        label: '中美贸易战',
+    },
+    {
+        value: 'Option2',
+        label: '俄乌战争',
+    },
+    {
+        value: 'Option3',
+        label: '巴以战争',
+    },
+]
 
 const mindData = {
     "data": {
