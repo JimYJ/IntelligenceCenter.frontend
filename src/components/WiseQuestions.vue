@@ -58,9 +58,11 @@
         <el-divider />
         <el-space :size="12" spacer=" " wrap direction="vertical">
             <el-tooltip class="box-item" effect="dark" content="创建自动更新的信息库" placement="left-end">
-                <el-icon :size="iconSize" class="icon">
-                    <Collection />
-                </el-icon>
+                <router-link to="/api/list">
+                    <el-icon :size="iconSize" class="icon">
+                        <Collection />
+                    </el-icon>
+                </router-link>
             </el-tooltip>
         </el-space>
     </el-card>
