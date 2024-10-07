@@ -64,6 +64,11 @@
                     </el-icon>
                 </router-link>
             </el-tooltip>
+            <el-tooltip class="box-item" effect="dark" content="首选项" placement="left-end">
+                <el-icon :size="iconSize" class="icon">
+                    <Setting @click="showOption = true" />
+                </el-icon>
+            </el-tooltip>
         </el-space>
     </el-card>
     <transition name="el-fade-in-linear">
@@ -92,22 +97,24 @@
             </div>
         </div>
     </transition>
+    <OptionPage v-model="showOption" @updateShow="showHideOption" />
 </template>
 
 <script  setup>
-import { Clock, ChatDotRound, ChatRound, Collection, Paperclip } from '@element-plus/icons-vue'
+import { Clock, ChatDotRound, ChatRound, Collection, Paperclip, Setting } from '@element-plus/icons-vue'
 import MarkdownHighlighter from './MarkdownHighlighter.vue';
 import MindMap from "simple-mind-map"
 import { nextTick, ref } from 'vue'
+import OptionPage from './OptionPage.vue'
 const textarea = ref('')
 
+// 首选项
+const showOption = ref(false)
+const showHideOption = (vision) => {
+    showOption.value = vision;
+};
+
 const iconSize = 25
-
-// const options = ref({
-//     useInternet: true,
-//     useArchive: false,
-// })
-
 const markdownList = ref([])
 let a = `
 # 这是标题
