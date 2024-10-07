@@ -11,12 +11,12 @@
             <el-col :span="24" style="min-height: 300px;">
                 <div class="box" :class="smartMode?'box-left':'box-center'">
                     <el-input resize="none" v-model="textarea" :rows="4" type="textarea" placeholder="输入你想要的内容" />
-                    <el-row class="row-bg" justify="space-between">
+                    <el-row class="row-bg" justify="space-between" align="middle">
                         <el-col :span="2" style="text-align: left;">
                             <el-switch v-model="useArchive" class="ml-2" width="50" inline-prompt active-text="启用" inactive-text="禁用" />
                         </el-col>
                         <el-col :span="10" style="text-align: left;">
-                            <el-select v-model="value3" multiple collapse-tags collapse-tags-tooltip placeholder="选择档案库" style="width: 180px" :disabled="!useArchive">
+                            <el-select v-model="value3" size="small" multiple collapse-tags collapse-tags-tooltip placeholder="选择档案库" style="width: 180px;" :disabled="!useArchive">
                                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
                             </el-select>
                         </el-col>
