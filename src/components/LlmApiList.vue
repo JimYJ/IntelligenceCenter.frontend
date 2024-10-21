@@ -28,9 +28,12 @@
             </template>
             <el-table :data="tableData" style="width: 100%;">
                 <el-table-column prop="api_type" label="API类型" min-width="200" />
-                <el-table-column prop="api_set_name" label="API配置名称" min-width="200" />
+                <el-table-column prop="name" label="API配置名称" min-width="200" />
                 <el-table-column prop="api_url" label="API地址" min-width="400" />
-                <el-table-column prop="api_secret" label="API秘钥" min-width="200" />
+                <el-table-column prop="api_key" label="API秘钥" min-width="200" />
+                <el-table-column prop="api_key" label="请求超时时间(秒)" min-width="200" />
+                <el-table-column prop="api_key" label="并发限制(秒)" min-width="200" />
+                <el-table-column prop="api_key" label="备注" min-width="200" />
             </el-table>
             <div class="pagination-block">
                 <el-pagination :page-size="12" :pager-count="curPage" layout="prev, pager, next, jumper" :total="1000" />
@@ -44,6 +47,7 @@
 import CreateAPISetup from './CreateAPISetup.vue'
 import { Search } from '@element-plus/icons-vue'
 import { ref } from 'vue'
+import { post } from '../http'; // 导入封装的函数
 const onBack = () => {
 }
 const curPage = 11
@@ -51,14 +55,25 @@ const showCreateAPI = ref(false)
 const hideCreateAPI = (vision) => {
     showCreateAPI.value = vision;
 };
-const tableData = [
-    {
-        api_type: 'OpenAI API',
-        api_set_name: 'OpenAIKey1',
-        api_url: 'https://api.openai.com/v1/chat/completions',
-        api_secret: 'PI&*GYTEWSG*4ya0pe4rg',
-    },
-]
+const tableData = ref([])
+//     [
+//     {
+//         api_type: 'OpenAI API',
+//         name: 'OpenAIKey1',
+//         api_url: 'https://api.openai.com/v1/chat/completions',
+//         api_key: 'PI&*GYTEWSG*4ya0pe4rg',
+//     },
+// ]
+
+post("/llm/list").then(res => {
+    console.log("返回结果:" + res);
+    if (res.success) {
+        tableData.value = res.data.data
+        console.log(res.data.data)
+    } else {
+        // that.$message.error('登录失败')
+    }
+}).catch()
 </script>
 
 <style scoped>
