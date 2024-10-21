@@ -50,7 +50,7 @@ import { ref } from 'vue'
 import { post } from '../http'; // 导入封装的函数
 const onBack = () => {
 }
-const curPage = 11
+let curPage = 1
 const showCreateAPI = ref(false)
 const hideCreateAPI = (vision) => {
     showCreateAPI.value = vision;
@@ -61,6 +61,7 @@ post("/llm/list").then(res => {
     console.log(res);
     if (res.success) {
         tableData.value = res.data.records
+        curPage = res.current
         console.log(res.data)
     } else {
         // that.$message.error('登录失败')
