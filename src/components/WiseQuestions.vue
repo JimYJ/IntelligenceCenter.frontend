@@ -317,7 +317,7 @@ const hide = () => {
     transform: translate(-50%);
 }
 
-div /deep/ .el-textarea__inner {
+div :deep(.el-textarea__inner) {
     background-color: #f3f5fc !important;
     border-radius: 15px;
     border: 0px;
@@ -325,23 +325,23 @@ div /deep/ .el-textarea__inner {
     color: #a1a1a1;
 }
 
-div /deep/ .el-textarea__inner:hover {
+div :deep(.el-textarea__inner:hover) {
     box-shadow: none;
 }
 .body {
     width: 99%;
 }
-div /deep/ .el-textarea__inner::-webkit-scrollbar {
+div :deep(.el-textarea__inner::-webkit-scrollbar) {
     width: 6px;
     height: 6px;
 }
-div /deep/ .el-textarea__inner::-webkit-scrollbar-thumb {
+div :deep(.el-textarea__inner::-webkit-scrollbar-thumb) {
     border-radius: 3px;
     -moz-border-radius: 3px;
     -webkit-border-radius: 3px;
     background-color: #e2e2e2;
 }
-div /deep/ .el-textarea__inner::-webkit-scrollbar-track {
+div :deep(.el-textarea__inner::-webkit-scrollbar-track) {
     background-color: transparent;
 }
 
@@ -351,7 +351,7 @@ div /deep/ .el-textarea__inner::-webkit-scrollbar-track {
     left: 20px;
 }
 
-div /deep/ .el-card__body {
+div :deep(.el-card__body) {
     padding: 10px;
 }
 

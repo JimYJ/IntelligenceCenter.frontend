@@ -56,14 +56,6 @@ const hideCreateAPI = (vision) => {
     showCreateAPI.value = vision;
 };
 const tableData = ref([])
-//     [
-//     {
-//         api_type: 'OpenAI API',
-//         name: 'OpenAIKey1',
-//         api_url: 'https://api.openai.com/v1/chat/completions',
-//         api_key: 'PI&*GYTEWSG*4ya0pe4rg',
-//     },
-// ]
 
 post("/llm/list").then(res => {
     console.log("返回结果:" + res);
