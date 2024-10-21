@@ -29,7 +29,7 @@ export const post = (url, data) => {
 http.interceptors.response.use(
     response => {
         // 对响应数据做些什么
-        console.log(response)
+        console.log("响应报文:", response)
         return response.data; // 返回实际数据
     },
     error => {

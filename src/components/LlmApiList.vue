@@ -58,10 +58,10 @@ const hideCreateAPI = (vision) => {
 const tableData = ref([])
 
 post("/llm/list").then(res => {
-    console.log("返回结果:" + res);
+    console.log(res);
     if (res.success) {
-        tableData.value = res.data.data
-        console.log(res.data.data)
+        tableData.value = res.data.records
+        console.log(res.data)
     } else {
         // that.$message.error('登录失败')
     }
