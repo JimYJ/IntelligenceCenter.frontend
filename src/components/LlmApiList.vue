@@ -26,17 +26,21 @@
                     <!-- <el-button type="primary" class="ml-2">刷新</el-button> -->
                 </div>
             </template>
-            <el-table :data="tableData" style="width: 100%;">
-                <el-table-column prop="api_type" label="API类型" min-width="200" />
+            <el-table :data="pageInfo.records" style="width: 100%;">
+                <el-table-column prop="api_type" label="API类型" min-width="200">
+                    <template #default="{ row }">
+                        {{ getApiType(row.api_type) }}
+                    </template>
+                </el-table-column>
                 <el-table-column prop="name" label="API配置名称" min-width="200" />
                 <el-table-column prop="api_url" label="API地址" min-width="400" />
                 <el-table-column prop="api_key" label="API秘钥" min-width="200" />
-                <el-table-column prop="api_key" label="请求超时时间(秒)" min-width="200" />
-                <el-table-column prop="api_key" label="并发限制(秒)" min-width="200" />
-                <el-table-column prop="api_key" label="备注" min-width="200" />
+                <el-table-column prop="timeout" label="请求超时时间(秒)" min-width="200" />
+                <el-table-column prop="request_rate_limit" label="并发限制(秒)" min-width="200" />
+                <el-table-column prop="remark" label="备注" min-width="200" />
             </el-table>
             <div class="pagination-block">
-                <el-pagination :page-size="12" :pager-count="curPage" layout="prev, pager, next, jumper" :total="1000" />
+                <el-pagination :page-size="pageInfo.size" :pager-count="pageInfo.current" layout="prev, pager, next, jumper" :total="pageInfo.total" @current-change="changePage" />
             </div>
             <CreateAPISetup v-model="showCreateAPI" @updateShow="hideCreateAPI" />
         </el-page-header>
@@ -50,23 +54,56 @@ import { ref } from 'vue'
 import { post } from '../http'; // 导入封装的函数
 const onBack = () => {
 }
-let curPage = 1
+let pageInfo = ref({
+    keyword: "",
+    current: 1,
+    total: 0,
+    pages: 1,
+    size: 20,
+    records: [],
+})
+let pages = {
+    current: 1,
+    size: 20,
+}
+
+
+const statusMapping = {
+    [1]: 'OpenAI API',
+    [2]: 'Ollama API',
+};
+// 计算属性或方法用于获取 API 类型
+const getApiType = (apiType) => {
+    return statusMapping[apiType] || '未知类型'; // 如果找不到类型则返回默认值
+};
 const showCreateAPI = ref(false)
 const hideCreateAPI = (vision) => {
     showCreateAPI.value = vision;
 };
-const tableData = ref([])
 
-post("/llm/list").then(res => {
-    console.log(res);
-    if (res.success) {
-        tableData.value = res.data.records
-        curPage = res.current
-        console.log(res.data)
-    } else {
-        // that.$message.error('登录失败')
-    }
-}).catch()
+const changePage = (newPage) => {
+    console.log(newPage)
+    pageInfo.value.current = newPage
+    console.log(pageInfo.value.current)
+    pages.current = pageInfo.value.current
+    getData(pageInfo.value.keyword, pages)
+};
+
+const getData = (keyword) => {
+    console.log(keyword)
+    pageInfo.value.keyword = keyword
+    post("/llm/list", keyword, pages).then(res => {
+        console.log(res);
+        if (res.success) {
+            pageInfo.value = res.data
+            console.log(res.data)
+        } else {
+            // that.$message.error('登录失败')
+        }
+    }).catch()
+}
+getData()
+
 </script>
 
 <style scoped>

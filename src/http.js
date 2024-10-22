@@ -10,8 +10,8 @@ export const get = (url, params) => {
 };
 
 // 封装 POST 请求
-export const post = (url, data) => {
-    return http.post(url, data);
+export const post = (url, data, params) => {
+    return http.post(url, data, { params });
 };
 
 // // 添加请求拦截器
