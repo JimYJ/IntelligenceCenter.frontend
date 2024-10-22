@@ -52,6 +52,7 @@ import CreateAPISetup from './CreateAPISetup.vue'
 import { Search } from '@element-plus/icons-vue'
 import { ref } from 'vue'
 import { post } from '../http'; // 导入封装的函数
+import { ElMessage } from 'element-plus'
 const onBack = () => {
 }
 let pageInfo = ref({
@@ -98,7 +99,7 @@ const getData = (keyword) => {
             pageInfo.value = res.data
             console.log(res.data)
         } else {
-            // that.$message.error('登录失败')
+            ElMessage.error('加载列表失败')
         }
     }).catch()
 }

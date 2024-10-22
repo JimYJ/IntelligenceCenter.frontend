@@ -3,7 +3,7 @@
         <el-form :model="option">
             <el-form-item label="LLM API选择" label-width="150">
                 <el-space :size="8" spacer=" " wrap>
-                    <el-radio-group v-model="option.llmSelect">
+                    <el-radio-group v-model="llmSetting.api_type">
                         <el-radio-button value="1">OpenAI API</el-radio-button>
                         <el-radio-button value="2">Ollama</el-radio-button>
                         <el-radio-button value="3">Siliconflow API</el-radio-button>
@@ -17,9 +17,12 @@
             </el-form-item>
             <el-form-item label="LLM API配置" label-width="150">
                 <el-space :size="8" spacer=" " wrap>
-                    <el-input v-model="option.apiSetName" placeholder="配置名称" style="width: 300px" />
-                    <el-input v-model="option.apiUrl" placeholder="API地址" style="width: 300px" />
-                    <el-input v-model="option.apiSecret" placeholder="API秘钥" style="width: 300px" />
+                    <el-input v-model="llmSetting.name" placeholder="配置名称" style="width: 300px" />
+                    <el-input v-model="llmSetting.api_url" placeholder="API地址" style="width: 300px" />
+                    <el-input v-model="llmSetting.api_key" placeholder="API秘钥" style="width: 300px" />
+                    <el-input v-model="llmSetting.timeout" placeholder="超时(秒)" style="width: 140px" />
+                    <el-input v-model="llmSetting.request_rate_limit" placeholder="并发限制(秒)" style="width: 140px" />
+                    <el-input v-model="llmSetting.remark" placeholder="备注" style="width: 300px" />
                 </el-space>
             </el-form-item>
         </el-form>
@@ -35,20 +38,36 @@
 <script setup>
 import { reactive, defineEmits } from "vue";
 import { QuestionFilled } from '@element-plus/icons-vue'
+import { post } from '../http'; // 导入封装的函数
+import { ElMessage } from 'element-plus'
 const emit = defineEmits(["updateShow"]);
 const cancel = () => {
     emit("updateShow", false);
 };
 
 const submit = () => {
+    post("/llm/add", llmSetting, null).then(res => {
+        console.log(res);
+        if (res.success) {
+            ElMessage({
+                message: '保存成功',
+                type: 'success',
+            })
+        } else {
+            ElMessage.error('保存失败')
+        }
+    }).catch()
     emit("updateShow", false);
 };
 
-const option = reactive({
-    apiSetName: "",
-    llmSelect: "1", // 默认：OpenAI API 枚举值 1-OpenAI API 2-Ollama 3-Siliconflow API
-    apiUrl: "",
-    apiSecret: "",
+const llmSetting = reactive({
+    name: "",
+    api_type: "1", // 默认：OpenAI API 枚举值 1-OpenAI API 2-Ollama 3-Siliconflow API
+    api_url: "",
+    api_key: "",
+    timeout: null,
+    request_rate_limit: null,
+    remark: "",
 });
 
 </script>
