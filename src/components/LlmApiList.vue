@@ -40,7 +40,7 @@
                 <el-table-column prop="remark" label="备注" min-width="200" />
             </el-table>
             <div class="pagination-block">
-                <el-pagination :page-size="pageInfo.size" :pager-count="pageInfo.current" layout="prev, pager, next, jumper" :total="pageInfo.total" @current-change="changePage" />
+                <el-pagination :page-size="pageInfo.size" :pager-count="5" :current-page="pageInfo.current" layout="prev, pager, next, jumper" :total="pageInfo.total" @current-change="changePage" />
             </div>
             <CreateAPISetup v-model="showCreateAPI" @updateShow="hideCreateAPI" />
         </el-page-header>
