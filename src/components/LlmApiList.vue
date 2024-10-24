@@ -105,9 +105,6 @@ const getData = (keyword) => {
         console.log(res);
         if (res.success) {
             pageInfo.value = res.data
-            if (pageInfo.value.current > pageInfo.value.total) {
-                pageInfo.value.current = pageInfo.value.total
-            }
             console.log(res.data)
         } else {
             ElMessage.error('加载列表失败')
