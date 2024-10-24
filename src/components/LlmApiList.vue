@@ -32,12 +32,20 @@
                         {{ getApiType(row.api_type) }}
                     </template>
                 </el-table-column>
-                <el-table-column prop="name" label="API配置名称" min-width="200" />
+                <el-table-column prop="name" label="API配置名称" min-width="120" />
                 <el-table-column prop="api_url" label="API地址" min-width="400" />
                 <el-table-column prop="api_key" label="API秘钥" min-width="200" />
-                <el-table-column prop="timeout" label="请求超时时间(秒)" min-width="200" />
-                <el-table-column prop="request_rate_limit" label="并发限制(秒)" min-width="200" />
+                <el-table-column prop="timeout" label="超时时间(秒)" min-width="100" />
+                <el-table-column prop="request_rate_limit" label="并发限制(秒)" min-width="100" />
                 <el-table-column prop="remark" label="备注" min-width="200" />
+                <el-table-column label="编辑" prop="id" min-width="200">
+                    <template #default="{ row }">
+                        <el-space :size="8" spacer=" " wrap>
+                            <el-button size="small" type="primary" plain>编辑</el-button>
+                            <el-button size="small" type="danger" @click="del(row.id)">删除</el-button>
+                        </el-space>
+                    </template>
+                </el-table-column>
             </el-table>
             <div class="pagination-block">
                 <el-pagination :page-size="pageInfo.size" :pager-count="5" :current-page="pageInfo.current" layout="prev, pager, next, jumper" :total="pageInfo.total" @current-change="changePage" />
@@ -51,7 +59,7 @@
 import CreateAPISetup from './CreateAPISetup.vue'
 import { Search } from '@element-plus/icons-vue'
 import { ref, provide } from 'vue'
-import { post } from '../http'; // 导入封装的函数
+import { post, get } from '../http'; // 导入封装的函数
 import { ElMessage } from 'element-plus'
 const onBack = () => {
 }
@@ -105,6 +113,22 @@ const getData = (keyword) => {
 }
 getData();
 provide('getData', getData); // 提供方法
+
+const del = (id) => {
+    console.log(id);
+    get("/llm/del", { id: id }).then(res => {
+        console.log(res);
+        if (res.success) {
+            ElMessage({
+                message: '删除成功',
+                type: 'success',
+            })
+            getData();
+        } else {
+            ElMessage.error('删除失败:' + res.message)
+        }
+    }).catch()
+};
 </script>
 
 <style scoped>
