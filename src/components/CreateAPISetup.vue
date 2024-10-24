@@ -53,12 +53,20 @@ const submit = () => {
                 message: '保存成功',
                 type: 'success',
             })
+            llmSetting.name = "";
+            llmSetting.api_key = "";
+            llmSetting.api_type = 1;
+            llmSetting.api_url = "";
+            llmSetting.remark = "";
+            llmSetting.request_rate_limit = null
+            llmSetting.timeout = null
         } else {
             ElMessage.error('保存失败')
         }
     }).catch()
     emit("updateShow", false);
 };
+
 
 const llmSetting = reactive({
     name: "",
