@@ -36,10 +36,12 @@
 </template>
 
 <script setup>
-import { reactive, defineEmits } from "vue";
+import { reactive, defineEmits, inject } from "vue";
 import { QuestionFilled } from '@element-plus/icons-vue'
 import { post } from '../http'; // 导入封装的函数
 import { ElMessage } from 'element-plus'
+
+const getData = inject('getData'); // 注入父组件的方法
 const emit = defineEmits(["updateShow"]);
 const cancel = () => {
     emit("updateShow", false);
@@ -55,13 +57,14 @@ const submit = () => {
             })
             llmSetting.name = "";
             llmSetting.api_key = "";
-            llmSetting.api_type = 1;
+            llmSetting.api_type = "1";
             llmSetting.api_url = "";
             llmSetting.remark = "";
             llmSetting.request_rate_limit = null
             llmSetting.timeout = null
+            getData();
         } else {
-            ElMessage.error('保存失败')
+            ElMessage.error('保存失败:' + res.message)
         }
     }).catch()
     emit("updateShow", false);

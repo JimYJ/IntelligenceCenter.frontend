@@ -50,7 +50,7 @@
 <script setup>
 import CreateAPISetup from './CreateAPISetup.vue'
 import { Search } from '@element-plus/icons-vue'
-import { ref } from 'vue'
+import { ref, provide } from 'vue'
 import { post } from '../http'; // 导入封装的函数
 import { ElMessage } from 'element-plus'
 const onBack = () => {
@@ -103,8 +103,8 @@ const getData = (keyword) => {
         }
     }).catch()
 }
-getData()
-
+getData();
+provide('getData', getData); // 提供方法
 </script>
 
 <style scoped>
