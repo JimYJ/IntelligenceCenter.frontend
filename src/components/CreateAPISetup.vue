@@ -60,7 +60,7 @@ let llmInit = {
 let llmSetting = reactive(llmInit);
 let isEdit = false;
 const setDetail = (detail) => {
-    if (detail = null) {
+    if (detail == null) {
         llmSetting = reactive(llmInit)
     }
     llmSetting = reactive(detail)
