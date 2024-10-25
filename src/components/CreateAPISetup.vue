@@ -1,6 +1,6 @@
 <template>
-    <el-drawer v-model="dialogFormVisible" title="LLM API设置" width="600" size="600">
-        <el-form :model="option">
+    <el-drawer title="LLM API设置" width="600" size="600">
+        <el-form :model="llmSetting">
             <el-form-item label="LLM API选择" label-width="150">
                 <el-space :size="8" spacer=" " wrap>
                     <el-radio-group v-model="llmSetting.api_type">
@@ -36,10 +36,11 @@
 </template>
 
 <script setup>
-import { reactive, defineEmits, inject } from "vue";
+import { reactive, defineEmits, inject, defineExpose } from "vue";
 import { QuestionFilled } from '@element-plus/icons-vue'
 import { post } from '../http'; // 导入封装的函数
 import { ElMessage } from 'element-plus'
+// import { defineExpose } from "vue";
 
 const getData = inject('getData'); // 注入父组件的方法
 const emit = defineEmits(["updateShow"]);
@@ -47,31 +48,7 @@ const cancel = () => {
     emit("updateShow", false);
 };
 
-const submit = () => {
-    post("/llm/add", llmSetting, null).then(res => {
-        console.log(res);
-        if (res.success) {
-            ElMessage({
-                message: '保存成功',
-                type: 'success',
-            })
-            llmSetting.name = "";
-            llmSetting.api_key = "";
-            llmSetting.api_type = "1";
-            llmSetting.api_url = "";
-            llmSetting.remark = "";
-            llmSetting.request_rate_limit = null
-            llmSetting.timeout = null
-            getData();
-        } else {
-            ElMessage.error('保存失败:' + res.message)
-        }
-    }).catch()
-    emit("updateShow", false);
-};
-
-
-const llmSetting = reactive({
+let llmInit = {
     name: "",
     api_type: "1", // 默认：OpenAI API 枚举值 1-OpenAI API 2-Ollama 3-Siliconflow API
     api_url: "",
@@ -79,6 +56,44 @@ const llmSetting = reactive({
     timeout: null,
     request_rate_limit: null,
     remark: "",
-});
-
+};
+let llmSetting = reactive(llmInit);
+let isEdit = false;
+const setDetail = (detail) => {
+    if (detail = null) {
+        llmSetting = reactive(llmInit)
+    }
+    llmSetting = reactive(detail)
+};
+const setMode = (mode) => {
+    isEdit = mode
+};
+const submit = () => {
+    console.log(isEdit)
+    if (isEdit) {
+        console.log(isEdit)
+    } else {
+        post("/llm/add", llmSetting, null).then(res => {
+            console.log(res);
+            if (res.success) {
+                ElMessage({
+                    message: '保存成功',
+                    type: 'success',
+                })
+                llmSetting.name = "";
+                llmSetting.api_key = "";
+                llmSetting.api_type = "1";
+                llmSetting.api_url = "";
+                llmSetting.remark = "";
+                llmSetting.request_rate_limit = null
+                llmSetting.timeout = null
+                getData();
+            } else {
+                ElMessage.error('保存失败:' + res.message)
+            }
+        }).catch()
+    }
+    emit("updateShow", false);
+};
+defineExpose({ setMode, setDetail })
 </script>

@@ -12,7 +12,7 @@
                 <div class="flex items-center">
                     <span class="text-large font-600 mr-3">LLM API配置列表</span>
                     <el-divider direction="vertical" />
-                    <el-button type="primary" @click="showCreateAPI = true">增加LLM API配置</el-button>
+                    <el-button type="primary" @click="create">增加LLM API配置</el-button>
                 </div>
             </template>
             <template #extra>
@@ -41,7 +41,7 @@
                 <el-table-column label="编辑" prop="id" min-width="200">
                     <template #default="{ row }">
                         <el-space :size="8" spacer=" " wrap>
-                            <el-button size="small" type="primary" plain>编辑</el-button>
+                            <el-button size="small" type="primary" @click="edit(row)" plain>编辑</el-button>
                             <el-button size="small" type="danger" @click="del(row.id)">删除</el-button>
                         </el-space>
                     </template>
@@ -50,7 +50,7 @@
             <div class="pagination-block">
                 <el-pagination :page-size="pageInfo.size" :pager-count="5" :current-page="pageInfo.current" layout="prev, pager, next, jumper" :total="pageInfo.total" @current-change="changePage" />
             </div>
-            <CreateAPISetup v-model="showCreateAPI" @updateShow="hideCreateAPI" />
+            <CreateAPISetup v-model="showCreateAPI" @updateShow="hideCreateAPI" ref="createAPIRef" />
         </el-page-header>
     </el-container>
 </template>
@@ -85,11 +85,8 @@ const statusMapping = {
 const getApiType = (apiType) => {
     return statusMapping[apiType] || '未知类型'; // 如果找不到类型则返回默认值
 };
-const showCreateAPI = ref(false)
-const hideCreateAPI = (vision) => {
-    showCreateAPI.value = vision;
-};
 
+// 翻页
 const changePage = (newPage) => {
     console.log(newPage)
     pageInfo.value.current = newPage
@@ -97,7 +94,7 @@ const changePage = (newPage) => {
     pages.current = pageInfo.value.current
     getData(pageInfo.value.keyword, pages)
 };
-
+// 获取列表
 const getData = (keyword) => {
     console.log(keyword)
     pageInfo.value.keyword = keyword
@@ -112,8 +109,9 @@ const getData = (keyword) => {
     }).catch()
 }
 getData();
-provide('getData', getData); // 提供方法
+provide('getData', getData);
 
+// 删除
 const del = (id) => {
     console.log(id);
     get("/llm/del", { id: id }).then(res => {
@@ -128,6 +126,22 @@ const del = (id) => {
             ElMessage.error('删除失败:' + res.message)
         }
     }).catch()
+};
+// 编辑
+const createAPIRef = ref()
+const create = () => {
+    showCreateAPI.value = true
+    createAPIRef.value.setMode(false)
+    createAPIRef.value.setDetail(null)
+};
+const showCreateAPI = ref(false)
+const hideCreateAPI = (vision) => {
+    showCreateAPI.value = vision;
+};
+const edit = (row) => {
+    createAPIRef.value.setMode(true)
+    createAPIRef.value.setDetail(row)
+    showCreateAPI.value = true
 };
 </script>
 
