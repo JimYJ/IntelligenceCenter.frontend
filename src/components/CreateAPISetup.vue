@@ -40,7 +40,6 @@ import { reactive, defineEmits, inject, defineExpose } from "vue";
 import { QuestionFilled } from '@element-plus/icons-vue'
 import { post } from '../http'; // 导入封装的函数
 import { ElMessage } from 'element-plus'
-// import { defineExpose } from "vue";
 
 const getData = inject('getData'); // 注入父组件的方法
 const emit = defineEmits(["updateShow"]);
@@ -60,10 +59,12 @@ let llmInit = {
 let llmSetting = reactive(llmInit);
 let isEdit = false;
 const setDetail = (detail) => {
+    console.log(detail)
     if (detail == null) {
         llmSetting = reactive(llmInit)
+    } else {
+        llmSetting = reactive(detail)
     }
-    llmSetting = reactive(detail)
 };
 const setMode = (mode) => {
     isEdit = mode
