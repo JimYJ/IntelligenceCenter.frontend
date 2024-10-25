@@ -61,7 +61,7 @@ let isEdit = false;
 const setDetail = (detail) => {
     console.log(detail)
     if (detail == null) {
-        llmSetting = reactive(llmInit)
+        initLlmSetting()
     } else {
         llmSetting = reactive(detail)
     }
@@ -72,7 +72,19 @@ const setMode = (mode) => {
 const submit = () => {
     console.log(isEdit)
     if (isEdit) {
-        console.log(isEdit)
+        post("/llm/edit", llmSetting, null).then(res => {
+            console.log(res);
+            if (res.success) {
+                ElMessage({
+                    message: '编辑成功',
+                    type: 'success',
+                })
+                initLlmSetting()
+                getData();
+            } else {
+                ElMessage.error('编辑失败:' + res.message)
+            }
+        }).catch()
     } else {
         post("/llm/add", llmSetting, null).then(res => {
             console.log(res);
@@ -81,13 +93,7 @@ const submit = () => {
                     message: '保存成功',
                     type: 'success',
                 })
-                llmSetting.name = "";
-                llmSetting.api_key = "";
-                llmSetting.api_type = "1";
-                llmSetting.api_url = "";
-                llmSetting.remark = "";
-                llmSetting.request_rate_limit = null
-                llmSetting.timeout = null
+                initLlmSetting()
                 getData();
             } else {
                 ElMessage.error('保存失败:' + res.message)
@@ -96,5 +102,14 @@ const submit = () => {
     }
     emit("updateShow", false);
 };
+const initLlmSetting = () => {
+    llmSetting.name = "";
+    llmSetting.api_key = "";
+    llmSetting.api_type = "1";
+    llmSetting.api_url = "";
+    llmSetting.remark = "";
+    llmSetting.request_rate_limit = null
+    llmSetting.timeout = null
+}
 defineExpose({ setMode, setDetail })
 </script>
