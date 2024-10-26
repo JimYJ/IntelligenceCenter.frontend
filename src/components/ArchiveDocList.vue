@@ -17,9 +17,9 @@
                 <div class="flex items-center">
                     <!-- <el-button>翻译</el-button> -->
                     <!-- <el-button type="primary" class="ml-2">刷新</el-button> -->
-                    <el-input v-model="input3" placeholder="输入内容搜索档案" class="input-with-select">
+                    <el-input v-model="pageInfo.keyword" placeholder="输入内容搜索档案" class="input-with-select">
                         <template #append>
-                            <el-button :icon="Search" />
+                            <el-button :icon="Search" @click="getData()" />
                         </template>
                     </el-input>
                 </div>
@@ -62,7 +62,7 @@
                 </el-table-column>
             </el-table>
             <div class="pagination-block">
-                <el-pagination :page-size="12" :pager-count="curPage" layout="prev, pager, next, jumper" :total="1000" />
+                <el-pagination :page-size="pageInfo.size" :pager-count="5" :current-page="pageInfo.current" layout="prev, pager, next, jumper" :total="pageInfo.total" @current-change="changePage" />
             </div>
         </el-page-header>
     </el-container>
@@ -91,11 +91,15 @@ let pages = {
     size: 20,
     id: id,
 }
+// 翻页
+const changePage = (newPage) => {
+    pageInfo.value.current = newPage
+    pages.current = pageInfo.value.current
+    getData()
+};
 // 获取列表
-const getData = (keyword) => {
-    console.log(keyword)
-    pageInfo.value.keyword = keyword
-    post("/archive/doc/list", keyword, pages).then(res => {
+const getData = () => {
+    post("/archive/doc/list", { keyword: pageInfo.value.keyword }, pages).then(res => {
         console.log(res);
         if (res.success) {
             pageInfo.value = res.data
