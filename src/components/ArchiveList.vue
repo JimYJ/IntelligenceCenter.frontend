@@ -23,22 +23,30 @@
                     </el-input>
                 </div>
             </template>
-            <el-table :data="tableData" style="width: 100%;">
-                <el-table-column prop="date" label="档案标题" min-width="200">
-                    <el-link type="primary" underline=false>
-                        <router-link :to="{ path: '/archive/document/list' }">俄乌战争系列</router-link>
-                    </el-link>
+            <el-table :data="pageInfo.records" style="width: 100%;">
+                <el-table-column prop="archive_name" label="档案标题" min-width="200">
+                    <template #default="{ row }">
+                        <el-link type="primary" underline=false>
+                            <router-link :to="{ path: '/archive/document/list' , query: { id: row.id } }">{{ row.archive_name }}</router-link>
+                        </el-link>
+                    </template>
                 </el-table-column>
-                <el-table-column prop="name" label="Name" min-width="200" />
-                <el-table-column prop="address" label="Address" min-width="300" />
-                <el-table-column prop="count" label="文档数" min-width="80" />
+                <el-table-column prop="extraction_mode" label="抽取模式" min-width="120">
+                    <template #default="{ row }">
+                        {{ getMode(row.extraction_mode) }}
+                    </template>
+                </el-table-column>
+                <el-table-column prop="extraction_model" label="抽取模型" min-width="120" />
+                <el-table-column prop="file_count" label="文档数" min-width="80" />
+                <el-table-column prop="created_at" label="创建时间" min-width="120" />
+                <el-table-column prop="updated_at" label="更新时间" min-width="120" />
                 <el-table-column prop="" label="操作" min-width="300">
                     <el-button type="primary" plain>重提取内容</el-button>
-                    <el-button type="primary" plain>下载文档内所有资源</el-button>
+                    <el-button type="primary" plain>下载档案内所有资源</el-button>
                 </el-table-column>
             </el-table>
             <div class="pagination-block">
-                <el-pagination :page-size="12" :pager-count="curPage" layout="prev, pager, next, jumper" :total="1000" />
+                <el-pagination :page-size="pageInfo.size" :pager-count="5" :current-page="pageInfo.current" layout="prev, pager, next, jumper" :total="pageInfo.total" @current-change="changePage" />
             </div>
         </el-page-header>
     </el-container>
@@ -46,82 +54,55 @@
 
 <script setup>
 import { Search } from '@element-plus/icons-vue'
+import { ElMessage } from 'element-plus'
+import { ref } from 'vue'
+import { post } from '../http';
 const onBack = () => {
 }
-const tableData = [
-    {
-        date: '2016-05-03',
-        name: 'Tom',
-        count: 25,
-        address: 'No. 189, Grove St, Los Angeles',
-    },
-    {
-        date: '2016-05-02',
-        name: 'Tom',
-        count: 25,
-        address: 'No. 189, Grove St, Los Angeles',
-    },
-    {
-        date: '2016-05-04',
-        name: 'Tom',
-        count: 25,
-        address: 'No. 189, Grove St, Los Angeles',
-    },
-    {
-        date: '2016-05-01',
-        name: 'Tom',
-        count: 25,
-        address: 'No. 189, Grove St, Los Angeles',
-    },
-    {
-        date: '2016-05-04',
-        name: 'Tom',
-        count: 25,
-        address: 'No. 189, Grove St, Los Angeles',
-    },
-    {
-        date: '2016-05-01',
-        name: 'Tom',
-        count: 25,
-        address: 'No. 189, Grove St, Los Angeles',
-    },
-    {
-        date: '2016-05-04',
-        name: 'Tom',
-        count: 25,
-        address: 'No. 189, Grove St, Los Angeles',
-    },
-    {
-        date: '2016-05-01',
-        name: 'Tom',
-        count: 25,
-        address: 'No. 189, Grove St, Los Angeles',
-    },
-    {
-        date: '2016-05-04',
-        name: 'Tom',
-        count: 25,
-        address: 'No. 189, Grove St, Los Angeles',
-    },
-    {
-        date: '2016-05-01',
-        name: 'Tom',
-        count: 25,
-        address: 'No. 189, Grove St, Los Angeles',
-    },
-    {
-        date: '2016-05-04',
-        name: 'Tom',
-        count: 25,
-        address: 'No. 189, Grove St, Los Angeles',
-    },
-    {
-        date: '2016-05-01',
-        name: 'Tom',
-        count: 25,
-        address: 'No. 189, Grove St, Los Angeles',
-    },
-]
+let pageInfo = ref({
+    keyword: "",
+    current: 1,
+    total: 0,
+    pages: 1,
+    size: 20,
+    records: [],
+})
+let pages = {
+    current: 1,
+    size: 20,
+}
+
+const modeMapping = {
+    [1]: '精准匹配',
+    [2]: '智能匹配',
+};
+// 计算属性或方法用于获取 API 类型
+const getMode = (mode) => {
+    return modeMapping[mode] || '未知'; // 如果找不到类型则返回默认值
+};
+// 翻页
+const changePage = (newPage) => {
+    console.log(newPage)
+    pageInfo.value.current = newPage
+    console.log(pageInfo.value.current)
+    pages.current = pageInfo.value.current
+    getData(pageInfo.value.keyword, pages)
+};
+// 获取列表
+const getData = (keyword) => {
+    console.log(keyword)
+    pageInfo.value.keyword = keyword
+    post("/archive/list", keyword, pages).then(res => {
+        console.log(res);
+        if (res.success) {
+            pageInfo.value = res.data
+            console.log(res.data)
+        } else {
+            ElMessage.error('加载列表失败')
+        }
+    }).catch()
+}
+getData();
 </script>
 
 <style scoped>
