@@ -46,7 +46,7 @@
                     </el-space>
                 </el-descriptions-item>
             </el-descriptions>
-            <el-table :data="tableData" style="width: 100%;">
+            <el-table :data="pageInfo.records" style="width: 100%;">
                 <el-table-column prop="date" label="档案标题" min-width="400">
                     <template v-slot="scope">
                         <el-link type="primary" underline=false>
@@ -70,70 +70,42 @@
 
 <script setup>
 import { Search } from '@element-plus/icons-vue'
+import { ElMessage } from 'element-plus'
+import { ref } from 'vue'
+import { post } from '../http'
+import { useRoute } from 'vue-router';
 const onBack = () => {
 }
-const tableData = [
-    {
-        date: '2016-05-03',
-        name: '俄军单兵硬刚乌军无人机:蓄力后一抡枪托直接打爆 瞬间火光迸射',
-        count: 25,
-        address: 'No. 189, Grove St, Los Angeles',
-    },
-    {
-        date: '2016-05-02',
-        name: '普京、梅洛尼均希望中国调停俄乌冲突，外交部回应',
-        count: 25,
-        address: 'No. 189, Grove St, Los Angeles',
-    },
-    {
-        date: '2016-05-04',
-        name: '俄媒：泽连斯基希望秋季结束冲突',
-        count: 25,
-        address: 'No. 189, Grove St, Los Angeles',
-    },
-    {
-        date: '2016-05-01',
-        name: '美防长：俄乌冲突最终将通过谈判解决',
-        count: 25,
-        address: 'No. 189, Grove St, Los Angeles',
-    },
-    {
-        date: '2016-05-04',
-        name: '外媒：铝热剂惊现俄乌战场',
-        count: 25,
-        address: 'No. 189, Grove St, Los Angeles',
-    },
-    {
-        date: '2016-05-01',
-        name: '乌克兰首都基辅传出多次爆炸声',
-        count: 25,
-        address: 'No. 189, Grove St, Los Angeles',
-    },
-    {
-        date: '2016-05-04',
-        name: '特朗普:乌克兰谎报阵亡人数',
-        count: 25,
-        address: 'No. 189, Grove St, Los Angeles',
-    },
-    {
-        date: '2016-05-01',
-        name: '泽连斯基：乌计划无期限保持夺取的俄领土',
-        count: 25,
-        address: 'No. 189, Grove St, Los Angeles',
-    },
-    {
-        date: '2016-05-04',
-        name: '乌称俄军向基辅发射导弹 俄方尚未回应',
-        count: 25,
-        address: 'No. 189, Grove St, Los Angeles',
-    },
-    {
-        date: '2016-05-01',
-        name: '俄称击落乌战机 乌称继续进攻库尔斯克',
-        count: 25,
-        address: 'No. 189, Grove St, Los Angeles',
-    },
-]
+const route = useRoute();
+const id = route.query.id;
+let pageInfo = ref({
+    keyword: "",
+    current: 1,
+    total: 0,
+    pages: 1,
+    size: 20,
+    records: [],
+})
+let pages = {
+    current: 1,
+    size: 20,
+    id: id,
+}
+// 获取列表
+const getData = (keyword) => {
+    console.log(keyword)
+    pageInfo.value.keyword = keyword
+    post("/archive/doc/list", keyword, pages).then(res => {
+        console.log(res);
+        if (res.success) {
+            pageInfo.value = res.data
+            console.log(res.data)
+        } else {
+            ElMessage.error('加载列表失败')
+        }
+    }).catch()
+}
+getData();
 </script>
 
 <style scoped>

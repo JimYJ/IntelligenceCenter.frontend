@@ -18,9 +18,9 @@
             <template #extra>
                 <div class="flex items-center">
                     <!-- <el-button>翻译</el-button> -->
-                    <el-input v-model="input3" placeholder="输入内容搜索" class="input-with-select">
+                    <el-input v-model="pageInfo.keyword" placeholder="输入内容搜索" class="input-with-select">
                         <template #append>
-                            <el-button :icon="Search" />
+                            <el-button :icon="Search" @click="getData()" />
                         </template>
                     </el-input>
                     <!-- <el-button type="primary" class="ml-2">刷新</el-button> -->
@@ -76,7 +76,6 @@ let pages = {
     size: 20,
 }
 
-
 const statusMapping = {
     [1]: 'OpenAI API',
     [2]: 'Ollama API',
@@ -88,17 +87,13 @@ const getApiType = (apiType) => {
 
 // 翻页
 const changePage = (newPage) => {
-    console.log(newPage)
     pageInfo.value.current = newPage
-    console.log(pageInfo.value.current)
     pages.current = pageInfo.value.current
-    getData(pageInfo.value.keyword, pages)
+    getData()
 };
 // 获取列表
-const getData = (keyword) => {
-    console.log(keyword)
-    pageInfo.value.keyword = keyword
-    post("/llm/list", keyword, pages).then(res => {
+const getData = () => {
+    post("/llm/list", { keyword: pageInfo.value.keyword }, pages).then(res => {
         console.log(res);
         if (res.success) {
             pageInfo.value = res.data
