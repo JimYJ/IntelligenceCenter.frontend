@@ -24,22 +24,30 @@
                 </div>
             </template>
             <el-table :data="pageInfo.records" style="width: 100%;">
-                <el-table-column prop="archive_name" label="档案标题" min-width="200">
+                <el-table-column prop="archive_name" label="档案标题" min-width="300">
                     <template #default="{ row }">
                         <el-link type="primary" underline=false>
                             <router-link :to="{ path: '/archive/document/list' , query: { id: row.id } }">{{ row.archive_name }}</router-link>
                         </el-link>
                     </template>
                 </el-table-column>
-                <el-table-column prop="extraction_mode" label="抽取模式" min-width="120">
+                <el-table-column prop="extraction_mode" label="抽取模式" min-width="80">
                     <template #default="{ row }">
                         {{ getMode(row.extraction_mode) }}
                     </template>
                 </el-table-column>
-                <el-table-column prop="extraction_model" label="抽取模型" min-width="120" />
-                <el-table-column prop="file_count" label="文档数" min-width="80" />
-                <el-table-column prop="created_at" label="创建时间" min-width="120" />
-                <el-table-column prop="updated_at" label="更新时间" min-width="120" />
+                <el-table-column prop="extraction_model" label="抽取模型" min-width="250">
+                    <template #default="{ row }">
+                        <el-space :size="2" spacer="/" wrap>
+                            <el-tag size="small">{{ getApiType(row.api_type) }}</el-tag>
+                            <el-tag size="small">{{row.llm_setting_name}}</el-tag>
+                            <el-tag size="small">{{row.extraction_model}}</el-tag>
+                        </el-space>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="file_count" label="文档数" min-width="50" />
+                <el-table-column prop="created_at" label="创建时间" min-width="110" />
+                <el-table-column prop="updated_at" label="更新时间" min-width="110" />
                 <el-table-column prop="" label="操作" min-width="300">
                     <el-button type="primary" plain>重提取内容</el-button>
                     <el-button type="primary" plain>下载档案内所有资源</el-button>
@@ -79,6 +87,14 @@ const modeMapping = {
 // 计算属性或方法用于获取 API 类型
 const getMode = (mode) => {
     return modeMapping[mode] || '未知'; // 如果找不到类型则返回默认值
+};
+const apiTypeMapping = {
+    [1]: 'OpenAI API',
+    [2]: 'Ollama API',
+};
+// 计算属性或方法用于获取 API 类型
+const getApiType = (apiType) => {
+    return apiTypeMapping[apiType] || '未知类型';
 };
 // 翻页
 const changePage = (newPage) => {
