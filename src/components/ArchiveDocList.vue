@@ -58,12 +58,12 @@
                 <el-table-column prop="resource_num" label="资源数量" min-width="80" />
                 <el-table-column prop="is_extracted" label="是否提取" min-width="80">
                     <template v-slot="scope">
-                        {{ showStatus(scope.row.is_extracted) }}
+                        <el-tag size="small" :type="scope.row.is_extracted ? 'success' : 'warning'">{{ showStatus(scope.row.is_extracted) }}</el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column prop="is_translated" label="是否翻译" min-width="80">
                     <template v-slot="scope">
-                        {{ showStatus(scope.row.is_translated) }}
+                        <el-tag size="small" :type="scope.row.is_translated ? 'success' : 'warning'">{{ showStatus(scope.row.is_translated) }}</el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column prop="created_at" label="创建时间" min-width="120" />
