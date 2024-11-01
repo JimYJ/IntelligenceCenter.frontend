@@ -23,7 +23,7 @@
                     </el-icon>首选项</el-menu-item>
             </el-menu>
         </el-aside>
-        <ArchiveDetail v-if="$route.path==='/archive/detail'" />
+        <ArchiveDocument v-if="$route.path==='/archive/detail'" />
         <ArchiveList v-if="$route.path==='/archive/list'" />
         <ArchiveDocList v-if="$route.path==='/archive/document/list'" />
         <TaskList v-if="$route.path==='/task/list'" />
@@ -33,7 +33,7 @@
 </template>
 
 <script setup>
-import ArchiveDetail from './ArchiveDetail.vue'
+import ArchiveDocument from './ArchiveDocument.vue'
 import ArchiveList from './ArchiveList.vue'
 import TaskList from './TaskList.vue'
 import OptionPage from './OptionPage.vue'

@@ -10,7 +10,7 @@
             </template>
             <template #content>
                 <div class="flex items-center">
-                    <span class="text-large font-600 mr-3">档案内容 - 俄乌战争系列</span>
+                    <span class="text-large font-600 mr-3">档案内容 - {{info.archive_name}}</span>
                 </div>
             </template>
             <template #extra>
@@ -28,16 +28,16 @@
                 <!-- <template #extra>
     <el-button type="primary">Operation</el-button>
   </template> -->
-                <el-descriptions-item label="文档数"> 25146 </el-descriptions-item>
-                <el-descriptions-item label="提取模式"> 智能提取 </el-descriptions-item>
+                <el-descriptions-item label="文档数"> {{info.file_count}} </el-descriptions-item>
+                <el-descriptions-item label="提取模式"> {{ getExtractMode(info.extraction_mode) }} </el-descriptions-item>
                 <el-descriptions-item label="提取模型">
                     <el-space :size="8" spacer="/" wrap>
-                        <el-tag size="small">OpenAI API</el-tag>
-                        <el-tag size="small">我的千问Key2</el-tag>
-                        <el-tag size="small">qwen-2.5-7b</el-tag>
+                        <el-tag size="small">{{ getApiType(info.api_type) }}</el-tag>
+                        <el-tag size="small">{{info.llm_setting_name}}</el-tag>
+                        <el-tag size="small">{{info.extraction_model}}</el-tag>
                     </el-space>
                 </el-descriptions-item>
-                <el-descriptions-item label="活跃任务 / 关联任务"> 5 / 15 </el-descriptions-item>
+                <el-descriptions-item label="活跃任务 / 关联任务"> {{info.active_task_count}} / {{info.task_count}} </el-descriptions-item>
                 <el-descriptions-item label="编辑">
                     <el-space :size="8" spacer=" " wrap>
                         <el-button size="small">修改提取方式</el-button>
@@ -50,15 +50,27 @@
                 <el-table-column prop="date" label="档案标题" min-width="400">
                     <template v-slot="scope">
                         <el-link type="primary" underline=false>
-                            <router-link type='primary' :to="{ path: '/archive/detail' }" label="tableData.name">{{ scope.row.name }}</router-link>
+                            <router-link type='primary' :to="{ path: '/archive/detail' }" label="tableData.name">{{ scope.row.doc_name }}</router-link>
                         </el-link>
                     </template>
                 </el-table-column>
-                <el-table-column prop="address" label="Address" min-width="200" />
-                <el-table-column prop="count" label="文档数" min-width="80" />
-                <el-table-column prop="" label="操作" min-width="300">
-                    <el-button type="primary" plain>重抽取</el-button>
-                    <el-button type="primary" plain>下载文档内所有资源</el-button>
+                <el-table-column prop="task_name" label="来源任务" min-width="200" />
+                <el-table-column prop="resource_num" label="资源数量" min-width="80" />
+                <el-table-column prop="is_extracted" label="是否提取" min-width="80">
+                    <template v-slot="scope">
+                        {{ showStatus(scope.row.is_extracted) }}
+                    </template>
+                </el-table-column>
+                <el-table-column prop="is_translated" label="是否翻译" min-width="80">
+                    <template v-slot="scope">
+                        {{ showStatus(scope.row.is_translated) }}
+                    </template>
+                </el-table-column>
+                <el-table-column prop="created_at" label="创建时间" min-width="120" />
+                <el-table-column prop="updated_at" label="修改时间" min-width="120" />
+                <el-table-column prop="" label="操作" min-width="200">
+                    <el-button type="primary" plain>重提取</el-button>
+                    <el-button type="primary" plain>下载资源</el-button>
                 </el-table-column>
             </el-table>
             <div class="pagination-block">
@@ -72,10 +84,30 @@
 import { Search } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import { ref } from 'vue'
-import { post } from '../http'
+import { post, get } from '../http'
 import { useRoute } from 'vue-router';
 const onBack = () => {
 }
+const apiTypeMapping = {
+    [1]: 'OpenAI API',
+    [2]: 'Ollama API',
+};
+// 计算属性或方法用于获取 API 类型
+const getApiType = (apiType) => {
+    return apiTypeMapping[apiType] || '未知类型';
+};
+const showStatus = (value) => {
+    return value === false ? '否' : value === true ? '是' : '数据错误';
+}
+
+const extractModeMapping = {
+    [1]: '精准匹配',
+    [2]: '智能匹配',
+};
+// 计算属性或方法用于获取 API 类型
+const getExtractMode = (mode) => {
+    return extractModeMapping[mode] || '未知类型';
+};
 const route = useRoute();
 const id = route.query.id;
 let pageInfo = ref({
@@ -86,6 +118,16 @@ let pageInfo = ref({
     size: 20,
     records: [],
 })
+let info = ref({
+    active_task_count: 0,
+    archive_name: "",
+    extraction_mode: 0,
+    extraction_model: "",
+    file_count: 0,
+    llm_setting_name: "",
+    task_count: 0,
+})
+
 let pages = {
     current: 1,
     size: 20,
@@ -106,6 +148,14 @@ const getData = () => {
             console.log(res.data)
         } else {
             ElMessage.error('加载列表失败')
+        }
+    }).catch()
+    get("/archive/info", pages).then(res => {
+        console.log(res);
+        if (res.success) {
+            info.value = res.data
+        } else {
+            ElMessage.error('加载档案信息失败')
         }
     }).catch()
 }
