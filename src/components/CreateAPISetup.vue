@@ -86,7 +86,7 @@ const submit = () => {
             }
         }).catch()
     } else {
-        post("/llm/add", llmSetting, null).then(res => {
+        post("/llm/create", llmSetting, null).then(res => {
             console.log(res);
             if (res.success) {
                 ElMessage({

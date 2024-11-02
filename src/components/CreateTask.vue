@@ -122,13 +122,13 @@
                             </el-tooltip>
                         </el-space>
                     </el-form-item>
-                    <el-divider content-position="left">内容抽取器设置</el-divider>
-                    <el-form-item label="提取模式" label-width="150">
+                    <el-divider content-position="left">内容提取设置</el-divider>
+                    <!-- <el-form-item label="提取模式" label-width="150">
                         <el-radio-group v-model="newTask.extraction_mode">
                             <el-radio-button value="1">精准抽取</el-radio-button>
                             <el-radio-button value="2">智能抽取</el-radio-button>
                         </el-radio-group>
-                    </el-form-item>
+                    </el-form-item> -->
                     <el-form-item label="提取LLM" label-width="150">
                         <el-cascader v-model="value" :options="llmList" @change="handleChange" style="width: 300px" />
                     </el-form-item>
@@ -158,7 +158,7 @@
 import { reactive, defineEmits, ref } from "vue";
 import { QuestionFilled } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
-import { get } from '../http'
+import { get, post } from '../http'
 const emit = defineEmits(["updateShow"]);
 
 const cancel = () => {
@@ -166,6 +166,17 @@ const cancel = () => {
 };
 
 const submit = () => {
+    post("/task/create", newTask).then(res => {
+        console.log(res);
+        if (res.success) {
+            ElMessage({
+                message: '创建任务成功',
+                type: 'success',
+            })
+        } else {
+            ElMessage.error('创建任务失败')
+        }
+    }).catch()
     emit("updateShow", false);
 };
 
@@ -192,7 +203,6 @@ const newTask = reactive({
     cycle_type: "1",  // 周期类型 1-每日 2-每周
     week_days: [],  // 指定周几执行，可多选，英文逗号隔开
     exec_time: "",  // 执行时间
-    // task_status: true,  // 任务状态 0关闭 1启用
     enable_filter: false,  // 启用匹配过滤器 0关闭 1启用
     domain_match: "",  // 域名匹配过滤器 为空则不生效
     path_match: "",  // 路径匹配过滤器 为空则不生效
@@ -203,9 +213,10 @@ const newTask = reactive({
     global_scraping_depth: 5,  // 抓取深度
     request_rate_limit: 100,  // 每秒请求上限
     use_proxy_ip_pool: false,  // 使用代理IP池
-    extraction_mode: true,  // 抽取模式 1精准抽取 2智能抽取
     api_settings_id: null,  // API设置表ID
     api_model: "",  // API指定LLM模型
+    // task_status: true,  // 任务状态 0关闭 1启用
+    // extraction_mode: true,  // 抽取模式 1精准抽取 2智能抽取
     // created_at: "",  // 创建时间
     // updated_at: ""  // 更新时间
 }
