@@ -31,7 +31,7 @@
                         </el-link>
                     </template>
                 </el-table-column>
-                <el-table-column prop="extraction_mode" label="抽取模式" min-width="80">
+                <!-- <el-table-column prop="extraction_mode" label="抽取模式" min-width="80">
                     <template #default="{ row }">
                         {{ getMode(row.extraction_mode) }}
                     </template>
@@ -44,7 +44,7 @@
                             <el-tag size="small">{{row.extraction_model}}</el-tag>
                         </el-space>
                     </template>
-                </el-table-column>
+                </el-table-column> -->
                 <el-table-column prop="file_count" label="文档数" min-width="50" />
                 <el-table-column prop="created_at" label="创建时间" min-width="110" />
                 <el-table-column prop="updated_at" label="更新时间" min-width="110" />
@@ -80,22 +80,6 @@ let pages = {
     size: 20,
 }
 
-const modeMapping = {
-    [1]: '精准匹配',
-    [2]: '智能匹配',
-};
-// 计算属性或方法用于获取 API 类型
-const getMode = (mode) => {
-    return modeMapping[mode] || '未知'; // 如果找不到类型则返回默认值
-};
-const apiTypeMapping = {
-    [1]: 'OpenAI API',
-    [2]: 'Ollama API',
-};
-// 计算属性或方法用于获取 API 类型
-const getApiType = (apiType) => {
-    return apiTypeMapping[apiType] || '未知类型';
-};
 // 翻页
 const changePage = (newPage) => {
     pageInfo.value.current = newPage

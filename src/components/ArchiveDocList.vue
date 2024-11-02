@@ -29,14 +29,14 @@
     <el-button type="primary">Operation</el-button>
   </template> -->
                 <el-descriptions-item label="文档数"> {{info.file_count}} </el-descriptions-item>
-                <el-descriptions-item label="提取模式"> {{ getExtractMode(info.extraction_mode) }} </el-descriptions-item>
+                <!-- <el-descriptions-item label="提取模式"> {{ getExtractMode(info.extraction_mode) }} </el-descriptions-item>
                 <el-descriptions-item label="提取模型">
                     <el-space :size="8" spacer="/" wrap>
                         <el-tag size="small">{{ getApiType(info.api_type) }}</el-tag>
                         <el-tag size="small">{{info.llm_setting_name}}</el-tag>
                         <el-tag size="small">{{info.extraction_model}}</el-tag>
                     </el-space>
-                </el-descriptions-item>
+                </el-descriptions-item> -->
                 <el-descriptions-item label="活跃任务 / 关联任务"> {{info.active_task_count}} / {{info.task_count}} </el-descriptions-item>
                 <el-descriptions-item label="编辑">
                     <el-space :size="8" spacer=" " wrap>
@@ -52,6 +52,20 @@
                         <el-link type="primary" underline=false>
                             <router-link type='primary' :to="{ path: '/archive/detail' }" label="tableData.name">{{ scope.row.doc_name }}</router-link>
                         </el-link>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="extraction_mode" label="抽取模式" min-width="80">
+                    <template #default="{ row }">
+                        {{ getExtractMode(row.extraction_mode) }}
+                    </template>
+                </el-table-column>
+                <el-table-column prop="extraction_model" label="抽取模型" min-width="250">
+                    <template #default="{ row }">
+                        <el-space :size="2" spacer="/" wrap>
+                            <el-tag size="small">{{ getApiType(row.api_type) }}</el-tag>
+                            <el-tag size="small">{{row.llm_setting_name}}</el-tag>
+                            <el-tag size="small">{{row.extraction_model}}</el-tag>
+                        </el-space>
                     </template>
                 </el-table-column>
                 <el-table-column prop="task_name" label="来源任务" min-width="200" />
@@ -119,13 +133,13 @@ let pageInfo = ref({
     records: [],
 })
 let info = ref({
-    active_task_count: 0,
     archive_name: "",
-    extraction_mode: 0,
-    extraction_model: "",
-    file_count: 0,
-    llm_setting_name: "",
-    task_count: 0,
+    // active_task_count: 0,
+    // extraction_mode: 0,
+    // extraction_model: "",
+    // file_count: 0,
+    // llm_setting_name: "",
+    // task_count: 0,
 })
 
 let pages = {
@@ -139,7 +153,7 @@ const changePage = (newPage) => {
     pages.current = pageInfo.value.current
     getData()
 };
-// 获取列表
+// 获取数据
 const getData = () => {
     post("/archive/doc/list", { keyword: pageInfo.value.keyword }, pages).then(res => {
         console.log(res);

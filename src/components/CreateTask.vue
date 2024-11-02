@@ -3,35 +3,35 @@
         <el-form :model="newTask">
             <el-form-item label="任务设置" class="flex gap-8 mb-4 items-center" label-width="150">
                 <el-space :size="8" spacer=" " wrap>
-                    <el-input v-model="newTask.name" placeholder="任务名称" style="width: 300px" />
+                    <el-input v-model="newTask.task_name" placeholder="任务名称" style="width: 300px" />
                 </el-space>
             </el-form-item>
             <el-form-item label="信息抓取网址" label-width="150">
-                <el-input v-model="newTask.urlList" type="textarea" placeholder="网址以http://或https://为前缀，如果存在多个网址，每行一个网址" />
+                <el-input v-model="newTask.crawl_url" type="textarea" placeholder="网址以http://或https://为前缀，如果存在多个网址，每行一个网址" />
             </el-form-item>
             <el-form-item label="执行时间" label-width="150">
-                <el-radio-group v-model="newTask.execOption">
+                <el-radio-group v-model="newTask.exec_type">
                     <el-radio-button value="1">立即开始</el-radio-button>
                     <el-radio-button value="2">周期循环</el-radio-button>
                 </el-radio-group>
             </el-form-item>
-            <el-form-item label="选择周期" label-width="150" v-if="newTask.execOption==2">
-                <el-radio-group v-model="newTask.execCycleOption">
+            <el-form-item label="选择周期" label-width="150" v-if="newTask.exec_type==2">
+                <el-radio-group v-model="newTask.cycle_type">
                     <el-radio-button value="1">每日</el-radio-button>
                     <el-radio-button value="2">每周</el-radio-button>
                 </el-radio-group>
             </el-form-item>
-            <el-form-item label="选择日期" v-if="newTask.execCycleOption==2&&newTask.execOption==2" label-width="150">
-                <el-checkbox v-model="checked3" label="周一" />
-                <el-checkbox v-model="checked4" label="周二" />
-                <el-checkbox v-model="checked4" label="周三" />
-                <el-checkbox v-model="checked4" label="周四" />
-                <el-checkbox v-model="checked4" label="周五" />
-                <el-checkbox v-model="checked4" label="周六" />
-                <el-checkbox v-model="checked4" label="周日" />
+            <el-form-item label="选择日期" v-if="newTask.cycle_type==2&&newTask.exec_type==2" label-width="150">
+                <el-checkbox v-model="week_days" label="周一" />
+                <el-checkbox v-model="week_days" label="周二" />
+                <el-checkbox v-model="week_days" label="周三" />
+                <el-checkbox v-model="week_days" label="周四" />
+                <el-checkbox v-model="week_days" label="周五" />
+                <el-checkbox v-model="week_days" label="周六" />
+                <el-checkbox v-model="week_days" label="周日" />
             </el-form-item>
-            <el-form-item label="执行时间" v-if="newTask.execOption==2" label-width="150">
-                <el-time-picker v-model="newTask.execTime" placeholder="选择执行时间" />
+            <el-form-item label="执行时间" v-if="newTask.exec_option==2" label-width="150">
+                <el-time-picker v-model="newTask.exec_time" placeholder="选择执行时间" />
             </el-form-item>
             <!-- <el-button type="primary" @click="showAdvancedSettings = !showAdvancedSettings">进阶设置</el-button> -->
             <el-form-item label="启用进阶设置" label-width="150">
@@ -42,7 +42,7 @@
                 <div v-show="showAdvancedSettings">
                     <el-form-item label="启用匹配过滤器" label-width="150">
                         <el-space :size="8" spacer=" " wrap>
-                            <el-switch v-model="newTask.filterEnable" />
+                            <el-switch v-model="newTask.enable_filter" />
                             <el-tooltip content="开启过滤器后，不匹配过滤器内容的网页将不会被抓取，如果某项过滤设置未填写，该项过滤将不会生效" raw-content>
                                 <el-icon>
                                     <QuestionFilled />
@@ -50,37 +50,19 @@
                             </el-tooltip>
                         </el-space>
                     </el-form-item>
-                    <el-form-item label="域名匹配" label-width="150" v-if="newTask.filterEnable">
-                        <el-input v-model="newTask.filterURL" type="textarea" placeholder="例:www.baidu.com或baidu.com，多个网址请用英文逗号隔开，配置后只抓取匹配域名的网址" />
-                    </el-form-item>
-                    <el-form-item label="关键词匹配" class="flex gap-8 mb-4 items-center" label-width="150" v-if="newTask.filterEnable">
-                        <el-space :size="8" spacer=" " wrap>
-                            <el-select v-model="newTask.filterKeyword" multiple filterable allow-create default-first-option :reserve-keyword="false" placeholder="输入关键词并回车" style="width: 300px">
-                                <el-option v-for="item in keyword" :key="item.value" :label="item.value" :value="item.value" />
-                            </el-select>
-                            <el-tooltip content="存在多个关键词，将任意匹配其中之一" raw-content>
-                                <el-icon>
-                                    <QuestionFilled />
-                                </el-icon>
-                            </el-tooltip>
-                        </el-space>
-                    </el-form-item>
-                    <el-form-item label="关键词匹配模式" label-width="150" v-if="newTask.filterEnable">
-                        <el-radio-group v-model="newTask.execCycleOption">
-                            <el-radio-button value="1">命中匹配</el-radio-button>
-                            <el-radio-button value="2">智能匹配</el-radio-button>
-                        </el-radio-group>
+                    <el-form-item label="域名匹配" label-width="150" v-if="newTask.enable_filter">
+                        <el-input v-model="newTask.domain_match" type="textarea" placeholder="例:www.baidu.com或baidu.com，多个网址请用英文逗号隔开，配置后只抓取匹配域名的网址" />
                     </el-form-item>
                     <el-divider content-position="left">档案设置</el-divider>
                     <el-form-item label="档案设置" label-width="150">
-                        <el-radio-group v-model="newTask.archiveOption">
+                        <el-radio-group v-model="newTask.archive_option">
                             <el-radio-button value="1">新建档案</el-radio-button>
                             <el-radio-button value="2">选择档案</el-radio-button>
                         </el-radio-group>
                     </el-form-item>
-                    <el-form-item label="指定档案" v-if="newTask.archiveOption==2" label-width="150">
-                        <el-select v-model="value" placeholder="选择匹配的档案" style="width: 240px">
-                            <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
+                    <el-form-item label="指定档案" v-if="newTask.archive_option==2" label-width="150">
+                        <el-select v-model="newTask.archive_id" placeholder="选择匹配的档案" style="width: 240px">
+                            <el-option v-for="item in archiveList" :key="item.id" :label="item.archive_name" :value="item.id" />
                         </el-select>
                     </el-form-item>
                     <!-- <el-form-item label="档案设置" v-if="newTask.archiveOption==2" class="flex gap-8 mb-4 items-center" label-width="150">
@@ -98,7 +80,7 @@
                     <el-divider content-position="left">情报抓取器配置</el-divider>
                     <el-form-item label="使用全局设置" label-width="150">
                         <el-space :size="8" spacer=" " wrap>
-                            <el-switch v-model="newTask.crawlerUseGroup" />
+                            <el-switch v-model="newTask.crawl_option" />
                             <el-tooltip content="当首选项中开启[全局并发池]设置时，本开关不可编辑" raw-content>
                                 <el-icon>
                                     <QuestionFilled />
@@ -106,8 +88,8 @@
                             </el-tooltip>
                         </el-space>
                     </el-form-item>
-                    <el-form-item label="抓取器选择" label-width="150" v-if="newTask.crawlerUseGroup==false">
-                        <el-radio-group v-model="newTask.crawlerSelect">
+                    <!-- <el-form-item label="抓取器选择" label-width="150" v-if="newTask.crawl_option==false">
+                        <el-radio-group v-model="newTask.crawl_type">
                             <el-radio-button value="1">内置爬虫</el-radio-button>
                             <el-radio-button value="2">headless浏览器</el-radio-button>
                             <el-radio-button value="3">firecrawl</el-radio-button>
@@ -117,30 +99,20 @@
                                 <QuestionFilled />
                             </el-icon>
                         </el-tooltip>
-                    </el-form-item>
-                    <el-form-item label="并发数" label-width="150" v-if="newTask.crawlerUseGroup==false">
+                    </el-form-item> -->
+                    <el-form-item label="并发数" label-width="150" v-if="newTask.crawl_option==false">
                         <el-input-number v-model="newTask.crawlerConcurrency" :min="1" :max="1024" @change="handleChange" style="width: 150px" />
                     </el-form-item>
-                    <el-form-item label="抓取间隔(秒)" label-width="150" v-if="newTask.crawlerUseGroup==false">
-                        <el-input-number v-model="newTask.crawlerDelay" :min="1" :max="3600" @change="handleChange" style="width: 150px" />
+                    <el-form-item label="抓取间隔(秒)" label-width="150" v-if="newTask.crawl_option==false">
+                        <el-input-number v-model="newTask.scraping_interval" :min="1" :max="3600" @change="handleChange" style="width: 150px" />
                     </el-form-item>
-                    <el-form-item label="全局抓取深度" label-width="150" v-if="newTask.crawlerUseGroup==false">
-                        <el-input-number v-model="newTask.crawlerMaxDepth" :min="1" :max="99" @change="handleChange" style="width: 150px" />
+                    <el-form-item label="全局抓取深度" label-width="150" v-if="newTask.crawl_option==false">
+                        <el-input-number v-model="newTask.global_scraping_depth" :min="1" :max="99" @change="handleChange" style="width: 150px" />
                     </el-form-item>
-                    <el-form-item label="每秒请求上限" label-width="150" v-if="newTask.crawlerUseGroup==false">
-                        <el-input-number v-model="newTask.crawlerRateLimit" :min="1" :max="1024" @change="handleChange" style="width: 150px" />
+                    <el-form-item label="每秒请求上限" label-width="150" v-if="newTask.crawl_option==false">
+                        <el-input-number v-model="newTask.request_rate_limit" :min="1" :max="1024" @change="handleChange" style="width: 150px" />
                     </el-form-item>
-                    <el-form-item label="启动虚拟IP" label-width="150" v-if="newTask.crawlerUseGroup==false">
-                        <el-space :size="8" spacer=" " wrap>
-                            <el-switch v-model="newTask.crawlerVirtualIP" />
-                            <el-tooltip content="虚拟IP只对少部分网站有效，如果无效被限制访问，则需要配置代理IP池" raw-content>
-                                <el-icon>
-                                    <QuestionFilled />
-                                </el-icon>
-                            </el-tooltip>
-                        </el-space>
-                    </el-form-item>
-                    <el-form-item label="使用代理IP池" label-width="150" v-if="newTask.crawlerUseGroup==false">
+                    <el-form-item label="使用代理IP池" label-width="150" v-if="newTask.crawl_option==false">
                         <el-space :size="8" spacer=" " wrap>
                             <el-switch v-model="newTask.crawlerIPPool" />
                             <el-tooltip content="需要先将准备好的IP列表文件放在本软件的proxyip目录下，每个IP用英文逗号隔开" raw-content>
@@ -151,18 +123,18 @@
                         </el-space>
                     </el-form-item>
                     <el-divider content-position="left">内容抽取器设置</el-divider>
-                    <el-form-item label="抽取模式" label-width="150">
-                        <el-radio-group v-model="newTask.execCycleOption">
+                    <el-form-item label="提取模式" label-width="150">
+                        <el-radio-group v-model="newTask.extraction_mode">
                             <el-radio-button value="1">精准抽取</el-radio-button>
                             <el-radio-button value="2">智能抽取</el-radio-button>
                         </el-radio-group>
                     </el-form-item>
-                    <el-form-item label="抽取器API" label-width="150">
-                        <el-cascader v-model="value" :options="llmOptions" @change="handleChange" style="width: 300px" />
+                    <el-form-item label="提取LLM" label-width="150">
+                        <el-cascader v-model="value" :options="llmList" @change="handleChange" style="width: 300px" />
                     </el-form-item>
                     <el-form-item label="指定模型" label-width="150">
                         <el-space :size="8" spacer=" " wrap>
-                            <el-input v-model="newTask.name" placeholder="指定模型" style="width: 300px" />
+                            <el-input v-model="newTask.api_model" placeholder="指定模型" style="width: 300px" />
                             <el-tooltip content="例如:gpt-4o-2024-08-06" raw-content>
                                 <el-icon>
                                     <QuestionFilled />
@@ -185,6 +157,8 @@
 <script setup>
 import { reactive, defineEmits, ref } from "vue";
 import { QuestionFilled } from '@element-plus/icons-vue'
+import { ElMessage } from 'element-plus'
+import { get } from '../http'
 const emit = defineEmits(["updateShow"]);
 
 const cancel = () => {
@@ -197,10 +171,8 @@ const submit = () => {
 
 // 初始化输入框数组
 // const contextIndexs = ref(['标题', '内容', '发布时间'])
-const keyword = ref([])
+// const keyword = ref([])
 const showAdvancedSettings = ref(false)
-
-
 // 添加输入框
 // function addInput() {
 //     contextIndexs.value.push('');
@@ -211,110 +183,56 @@ const showAdvancedSettings = ref(false)
 //     contextIndexs.value.splice(contextIndexs.value.length - 1, 1);
 // }
 
-
 const newTask = reactive({
-    name: "",
-    keyword: keyword,
-    urlList: "",
-    execOption: "1", // 1立即开始 2周期循环
-    execCycleOption: "1", // 1每日 2每周
-    execTime: "",
-    filterEnable: false,
-    filterURL: "",
-    filterKeyword: [],
-    archiveOption: "1",
-    archiveName: "",
-    archiveID: 1,
-    // archiveList: contextIndexs,
-    // crawlerContexts: contextIndexs,
-    crawlerSelect: "1",
-    crawlerUseGroup: true,
-    crawlerConcurrency: 5,
-    crawlerDelay: 0,
-    crawlerMaxDepth: 5,
-    crawlerRateLimit: 100,
-    crawlerVirtualIP: true,
-    crawlerIPPool: false,
-});
+    archive_option: "1",  // 1新建档案 2选择档案
+    archive_id: 1,  // 指定归档的档案ID
+    task_name: "",  // 任务名称
+    crawl_url: "",  // 抓取地址，多个地址换行分割
+    exec_type: "1",  // 执行类型 1-立即执行 2-周期循环
+    cycle_type: "1",  // 周期类型 1-每日 2-每周
+    week_days: [],  // 指定周几执行，可多选，英文逗号隔开
+    exec_time: "",  // 执行时间
+    // task_status: true,  // 任务状态 0关闭 1启用
+    enable_filter: false,  // 启用匹配过滤器 0关闭 1启用
+    domain_match: "",  // 域名匹配过滤器 为空则不生效
+    path_match: "",  // 路径匹配过滤器 为空则不生效
+    crawl_option: true,  // 抓取器设置 0自定义 1全局
+    crawl_type: "1",  // 抓取器选择 1 内置爬虫 2 headless浏览器 3 firecrawl
+    concurrent_count: 5,  // 并发数
+    scraping_interval: 0,  // 抓取间隔(秒)
+    global_scraping_depth: 5,  // 抓取深度
+    request_rate_limit: 100,  // 每秒请求上限
+    use_proxy_ip_pool: false,  // 使用代理IP池
+    extraction_mode: true,  // 抽取模式 1精准抽取 2智能抽取
+    api_settings_id: null,  // API设置表ID
+    api_model: "",  // API指定LLM模型
+    // created_at: "",  // 创建时间
+    // updated_at: ""  // 更新时间
+}
+);
 
-const llmOptions = [
-    {
-        value: '1',
-        label: 'OpenAI API',
-        children: [
-            {
-                value: '101',
-                label: '我的OpenAIKey1',
-            },
-            {
-                value: '102',
-                label: '我的OpenAIKey2',
-            },
-            {
-                value: '201',
-                label: '我的通义千问Key1',
-            },
-            {
-                value: '202',
-                label: '我的千问Key2',
-            },
-        ],
-    },
-    {
-        value: '2',
-        label: 'OLlama',
-        children: [
-            {
-                value: '201',
-                label: '我的OllamaKey1',
-            },
-            {
-                value: '202',
-                label: '我的OllamaKey2',
-            },
-        ],
-    },
-    {
-        value: '3',
-        label: 'Siliconflow API',
-        children: [
-            {
-                value: '301',
-                label: '我的Sf Key1',
-            },
-            {
-                value: '302',
-                label: '我的Sf Key2',
-            },
-            {
-                value: '303',
-                label: '我的Sf Key3',
-            },
-        ],
-    },
-]
+const archiveList = ref([])
+const llmList = ref([])
 
-const options = [
-    {
-        value: 'Option1',
-        label: 'Option1',
-    },
-    {
-        value: 'Option2',
-        label: 'Option2',
-    },
-    {
-        value: 'Option3',
-        label: 'Option3',
-    },
-    {
-        value: 'Option4',
-        label: 'Option4',
-    },
-    {
-        value: 'Option5',
-        label: 'Option5',
-    },
-]
+// 获取数据
+const getData = () => {
+    get("/llm/list/grouping").then(res => {
+        console.log(res);
+        if (res.success) {
+            llmList.value = res.data
+        } else {
+            ElMessage.error('加载Llm分组失败')
+        }
+    }).catch()
+    get("/archive/list/select").then(res => {
+        console.log(res);
+        if (res.success) {
+            archiveList.value = res.data
+        } else {
+            ElMessage.error('加载档案信息失败')
+        }
+    }).catch()
+}
+getData();
 </script>
 
