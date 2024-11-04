@@ -22,13 +22,15 @@
                 </el-radio-group>
             </el-form-item>
             <el-form-item label="选择日期" v-if="newTask.cycle_type==2&&newTask.exec_type==2" label-width="150">
-                <el-checkbox v-model="week_days" label="周一" />
-                <el-checkbox v-model="week_days" label="周二" />
-                <el-checkbox v-model="week_days" label="周三" />
-                <el-checkbox v-model="week_days" label="周四" />
-                <el-checkbox v-model="week_days" label="周五" />
-                <el-checkbox v-model="week_days" label="周六" />
-                <el-checkbox v-model="week_days" label="周日" />
+                <el-checkbox-group v-model="newTask.week_days">
+                    <el-checkbox label="周一" value="1" />
+                    <el-checkbox label="周二" value="2" />
+                    <el-checkbox label="周三" value="3" />
+                    <el-checkbox label="周四" value="4" />
+                    <el-checkbox label="周五" value="5" />
+                    <el-checkbox label="周六" value="6" />
+                    <el-checkbox label="周日" value="7" />
+                </el-checkbox-group>
             </el-form-item>
             <el-form-item label="执行时间" v-if="newTask.exec_option==2" label-width="150">
                 <el-time-picker v-model="newTask.exec_time" placeholder="选择执行时间" />
@@ -167,7 +169,7 @@ const cancel = () => {
 
 const submit = () => {
     post("/task/create", newTask).then(res => {
-        console.log(res);
+        console.log(newTask);
         if (res.success) {
             ElMessage({
                 message: '创建任务成功',
@@ -203,6 +205,7 @@ const newTask = reactive({
     cycle_type: "1",  // 周期类型 1-每日 2-每周
     week_days: [],  // 指定周几执行，可多选，英文逗号隔开
     exec_time: "",  // 执行时间
+    enable_advanced_settings: false,
     enable_filter: false,  // 启用匹配过滤器 0关闭 1启用
     domain_match: "",  // 域名匹配过滤器 为空则不生效
     path_match: "",  // 路径匹配过滤器 为空则不生效
@@ -213,7 +216,7 @@ const newTask = reactive({
     global_scraping_depth: 5,  // 抓取深度
     request_rate_limit: 100,  // 每秒请求上限
     use_proxy_ip_pool: false,  // 使用代理IP池
-    api_settings_id: null,  // API设置表ID
+    api_settings_id: 1,  // API设置表ID
     api_model: "",  // API指定LLM模型
     // task_status: true,  // 任务状态 0关闭 1启用
     // extraction_mode: true,  // 抽取模式 1精准抽取 2智能抽取
