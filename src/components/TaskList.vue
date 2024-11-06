@@ -19,9 +19,9 @@
                 <div class="flex items-center">
                     <!-- <el-button>翻译</el-button> -->
                     <!-- <el-button type="primary" class="ml-2">刷新</el-button> -->
-                    <el-input v-model="input3" placeholder="输入内容搜索" class="input-with-select">
+                    <el-input v-model="pageInfo.keyword" placeholder="输入内容搜索任务" class="input-with-select">
                         <template #append>
-                            <el-button :icon="Search" />
+                            <el-button :icon="Search" @click="getData()" />
                         </template>
                     </el-input>
                 </div>
@@ -59,13 +59,34 @@
                     </el-col>
                 </el-row>
             </el-card>
-            <el-table :data="tableData" style="width: 100%;">
-                <el-table-column prop="date" label="Date" min-width="200" />
-                <el-table-column prop="name" label="Name" min-width="200" />
-                <el-table-column prop="address" label="Address" min-width="300" />
+            <el-table :data="pageInfo.records" style="width: 100%;">
+                <el-table-column prop="task_name" label="任务名称" min-width="200" />
+                <el-table-column prop="archive_name" label="归属档案" min-width="200" />
+                <el-table-column prop="task_ststus" label="任务状态" min-width="80">
+                    <template #default="{ row }">
+                        <el-tag size="small" :type="row.task_status ? 'success' : 'warning'">{{ showStatus(row.task_status) }}</el-tag>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="task_ststus" label="执行时间" min-width="300" />
+                <el-table-column prop="task_ststus" label="抓取模式" min-width="80">
+                    <template #default="{ row }">
+                        <el-tag size="small" type="primary">{{ showCrawlMode(row.crawl_mode) }}</el-tag>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="extraction_model" label="抽取模型" min-width="250">
+                    <template #default="{ row }">
+                        <el-space :size="2" spacer="/" wrap>
+                            <el-tag size="small">{{ getApiType(row.api_type) }}</el-tag>
+                            <el-tag size="small">{{row.llm_setting_name}}</el-tag>
+                            <el-tag size="small">{{row.extraction_model}}</el-tag>
+                        </el-space>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="created_at" label="创建时间" min-width="80" />
+                <el-table-column prop="updated_at" label="更新时间" min-width="80" />
             </el-table>
             <div class="pagination-block">
-                <el-pagination :page-size="12" :pager-count="curPage" layout="prev, pager, next, jumper" :total="1000" />
+                <el-pagination :page-size="pageInfo.size" :pager-count="5" :current-page="pageInfo.current" layout="prev, pager, next, jumper" :total="pageInfo.total" @current-change="changePage" />
             </div>
             <CreateTask v-model="showCreateTask" @updateShow="hideCreateTask" />
         </el-page-header>
@@ -75,73 +96,69 @@
 <script setup>
 import CreateTask from './CreateTask.vue'
 import { Search } from '@element-plus/icons-vue'
+import { ElMessage } from 'element-plus'
 import { ref } from 'vue'
+import { useTransition } from "@vueuse/core";
+import { post } from '../http';
 const onBack = () => {
+    window.history.back();
 }
-const curPage = 11
 const showCreateTask = ref(false)
 const hideCreateTask = (vision) => {
     showCreateTask.value = vision;
 };
-import { useTransition } from "@vueuse/core";
-
 const source = ref(0);
 const outputValue = useTransition(source, {
     duration: 1500,
 });
 source.value = 172000;
-const tableData = [
-    {
-        date: '2016-05-03',
-        name: 'Tom',
-        address: 'No. 189, Grove St, Los Angeles',
-    },
-    {
-        date: '2016-05-02',
-        name: 'Tom',
-        address: 'No. 189, Grove St, Los Angeles',
-    },
-    {
-        date: '2016-05-04',
-        name: 'Tom',
-        address: 'No. 189, Grove St, Los Angeles',
-    },
-    {
-        date: '2016-05-01',
-        name: 'Tom',
-        address: 'No. 189, Grove St, Los Angeles',
-    },
-    {
-        date: '2016-05-04',
-        name: 'Tom',
-        address: 'No. 189, Grove St, Los Angeles',
-    },
-    {
-        date: '2016-05-01',
-        name: 'Tom',
-        address: 'No. 189, Grove St, Los Angeles',
-    },
-    {
-        date: '2016-05-04',
-        name: 'Tom',
-        address: 'No. 189, Grove St, Los Angeles',
-    },
-    {
-        date: '2016-05-01',
-        name: 'Tom',
-        address: 'No. 189, Grove St, Los Angeles',
-    },
-    {
-        date: '2016-05-04',
-        name: 'Tom',
-        address: 'No. 189, Grove St, Los Angeles',
-    },
-    {
-        date: '2016-05-01',
-        name: 'Tom',
-        address: 'No. 189, Grove St, Los Angeles',
-    },
-]
+let pageInfo = ref({
+    keyword: "",
+    current: 1,
+    total: 0,
+    pages: 1,
+    size: 20,
+    records: [],
+})
+let pages = {
+    current: 1,
+    size: 20,
+}
+// 翻页 
+const changePage = (newPage) => {
+    pageInfo.value.current = newPage
+    pages.current = pageInfo.value.current
+    getData()
+};
+// 获取数据
+const getData = () => {
+    post("/task/list", { keyword: pageInfo.value.keyword }, pages).then(res => {
+        console.log(res);
+        if (res.success) {
+            pageInfo.value = res.data
+        } else {
+            ElMessage.error('加载任务列表失败')
+        }
+    }).catch()
+}
+getData();
+
+const apiTypeMapping = {
+    [1]: 'OpenAI API',
+    [2]: 'Ollama API',
+};
+// 计算属性或方法用于获取 API 类型
+const getApiType = (apiType) => {
+    return apiTypeMapping[apiType] || '未知类型';
+};
+const showStatus = (value) => {
+    console.log(value)
+    return value === false ? '关闭' : value === true ? '启用' : '数据错误';
+}
+const showCrawlMode = (value) => {
+    console.log(value)
+    return value === false ? '地址抓取' : value === true ? '启用' : '数据错误';
+}
 </script>
 
 <style scoped>

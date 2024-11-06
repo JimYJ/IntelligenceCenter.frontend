@@ -101,6 +101,7 @@ import { ref } from 'vue'
 import { post, get } from '../http'
 import { useRoute } from 'vue-router';
 const onBack = () => {
+    window.history.back();
 }
 const apiTypeMapping = {
     [1]: 'OpenAI API',

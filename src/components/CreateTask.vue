@@ -6,8 +6,14 @@
                     <el-input v-model="newTask.task_name" placeholder="任务名称" style="width: 300px" />
                 </el-space>
             </el-form-item>
+            <el-form-item label="信息抓取模式" label-width="150">
+                <el-radio-group v-model="newTask.crawl_mode">
+                    <el-radio-button value="1" @click="changePlaceholder(1)">地址抓取</el-radio-button>
+                    <el-radio-button value="2" @click="changePlaceholder(2)">智能抓取</el-radio-button>
+                </el-radio-group>
+            </el-form-item>
             <el-form-item label="信息抓取网址" label-width="150">
-                <el-input v-model="newTask.crawl_url" type="textarea" placeholder="网址以http://或https://为前缀，如果存在多个网址，每行一个网址" />
+                <el-input v-model="newTask.crawl_url" type="textarea" :placeholder="crawl_url_placeholder" />
             </el-form-item>
             <el-form-item label="执行时间" label-width="150">
                 <el-radio-group v-model="newTask.exec_type">
@@ -32,14 +38,26 @@
                     <el-checkbox label="周日" value="7" />
                 </el-checkbox-group>
             </el-form-item>
-            <el-form-item label="执行时间" v-if="newTask.exec_option==2" label-width="150">
-                <el-time-picker v-model="newTask.exec_time" placeholder="选择执行时间" />
+            <el-form-item label="执行时间" v-if="newTask.exec_type==2" label-width="150">
+                <el-time-picker v-model="newTask.exec_time" placeholder="选择执行时间" value-format="HH:mm:ss" />
             </el-form-item>
-            <!-- <el-button type="primary" @click="showAdvancedSettings = !showAdvancedSettings">进阶设置</el-button> -->
+            <el-divider content-position="left">内容提取设置</el-divider>
+            <el-form-item label="提取LLM" label-width="150">
+                <el-cascader v-model="value" :options="llmList" @change="handleChange" style="width: 300px" />
+            </el-form-item>
+            <el-form-item label="指定模型" label-width="150">
+                <el-space :size="8" spacer=" " wrap>
+                    <el-input v-model="newTask.extraction_model" placeholder="指定模型" style="width: 300px" />
+                    <el-tooltip content="例如:gpt-4o-2024-08-06" raw-content>
+                        <el-icon>
+                            <QuestionFilled />
+                        </el-icon>
+                    </el-tooltip>
+                </el-space>
+            </el-form-item>
             <el-form-item label="启用进阶设置" label-width="150">
                 <el-switch v-model="showAdvancedSettings" />
             </el-form-item>
-            <!-- <el-divider content-position="left" @click="showAdvancedSettings = !showAdvancedSettings">进阶设置</el-divider> -->
             <el-collapse-transition>
                 <div v-show="showAdvancedSettings">
                     <el-form-item label="启用匹配过滤器" label-width="150">
@@ -53,7 +71,10 @@
                         </el-space>
                     </el-form-item>
                     <el-form-item label="域名匹配" label-width="150" v-if="newTask.enable_filter">
-                        <el-input v-model="newTask.domain_match" type="textarea" placeholder="例:www.baidu.com或baidu.com，多个网址请用英文逗号隔开，配置后只抓取匹配域名的网址" />
+                        <el-input v-model="newTask.domain_match" type="textarea" placeholder="例:www.baidu.com或baidu.com，多个网址请换行，配置后只抓取匹配域名的网址" />
+                    </el-form-item>
+                    <el-form-item label="路径匹配" label-width="150" v-if="newTask.enable_filter">
+                        <el-input v-model="newTask.path_match" type="textarea" placeholder="例:/user/list/*，多个网址请换行，配置后只抓取匹配域名的网址" />
                     </el-form-item>
                     <el-divider content-position="left">档案设置</el-divider>
                     <el-form-item label="档案设置" label-width="150">
@@ -124,26 +145,6 @@
                             </el-tooltip>
                         </el-space>
                     </el-form-item>
-                    <el-divider content-position="left">内容提取设置</el-divider>
-                    <!-- <el-form-item label="提取模式" label-width="150">
-                        <el-radio-group v-model="newTask.extraction_mode">
-                            <el-radio-button value="1">精准抽取</el-radio-button>
-                            <el-radio-button value="2">智能抽取</el-radio-button>
-                        </el-radio-group>
-                    </el-form-item> -->
-                    <el-form-item label="提取LLM" label-width="150">
-                        <el-cascader v-model="value" :options="llmList" @change="handleChange" style="width: 300px" />
-                    </el-form-item>
-                    <el-form-item label="指定模型" label-width="150">
-                        <el-space :size="8" spacer=" " wrap>
-                            <el-input v-model="newTask.api_model" placeholder="指定模型" style="width: 300px" />
-                            <el-tooltip content="例如:gpt-4o-2024-08-06" raw-content>
-                                <el-icon>
-                                    <QuestionFilled />
-                                </el-icon>
-                            </el-tooltip>
-                        </el-space>
-                    </el-form-item>
                 </div>
             </el-collapse-transition>
         </el-form>
@@ -175,11 +176,22 @@ const submit = () => {
                 message: '创建任务成功',
                 type: 'success',
             })
+            newTask.value = initTask
+            emit("updateShow", false);
         } else {
-            ElMessage.error('创建任务失败')
+            ElMessage.error(res.message)
         }
     }).catch()
-    emit("updateShow", false);
+};
+
+const crawl_url_placeholder = ref("网址以http://或https://为前缀，如果存在多个网址，每行一个网址")
+// 方法：改变 placeholder
+const changePlaceholder = (mode) => {
+    if (mode == "1") {
+        crawl_url_placeholder.value = '网址以http://或https://为前缀，如果存在多个网址，每行一个网址';
+    } else if (mode == "2") {
+        crawl_url_placeholder.value = '描述要获取的资料信息，大模型会根据你的描述搜索相关资料';
+    }
 };
 
 // 初始化输入框数组
@@ -195,11 +207,11 @@ const showAdvancedSettings = ref(false)
 // function removeInput() {
 //     contextIndexs.value.splice(contextIndexs.value.length - 1, 1);
 // }
-
-const newTask = reactive({
+const initTask = {
     archive_option: "1",  // 1新建档案 2选择档案
-    archive_id: 1,  // 指定归档的档案ID
+    archive_id: 0,  // 指定归档的档案ID
     task_name: "",  // 任务名称
+    crawl_mode: "1",  // 抓取模式 1地址抓取 2描述搜索抓取
     crawl_url: "",  // 抓取地址，多个地址换行分割
     exec_type: "1",  // 执行类型 1-立即执行 2-周期循环
     cycle_type: "1",  // 周期类型 1-每日 2-每周
@@ -217,13 +229,14 @@ const newTask = reactive({
     request_rate_limit: 100,  // 每秒请求上限
     use_proxy_ip_pool: false,  // 使用代理IP池
     api_settings_id: 1,  // API设置表ID
-    api_model: "",  // API指定LLM模型
+    extraction_model: "",  // API指定LLM模型
     // task_status: true,  // 任务状态 0关闭 1启用
     // extraction_mode: true,  // 抽取模式 1精准抽取 2智能抽取
     // created_at: "",  // 创建时间
     // updated_at: ""  // 更新时间
 }
-);
+
+const newTask = reactive(initTask);
 
 const archiveList = ref([])
 const llmList = ref([])

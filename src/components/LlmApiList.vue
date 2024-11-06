@@ -62,6 +62,7 @@ import { ref, provide } from 'vue'
 import { post, get } from '../http'; // 导入封装的函数
 import { ElMessage } from 'element-plus'
 const onBack = () => {
+    window.history.back();
 }
 let pageInfo = ref({
     keyword: "",

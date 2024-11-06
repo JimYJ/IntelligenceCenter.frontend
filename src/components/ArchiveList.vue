@@ -66,6 +66,7 @@ import { ElMessage } from 'element-plus'
 import { ref } from 'vue'
 import { post } from '../http';
 const onBack = () => {
+    window.history.back();
 }
 let pageInfo = ref({
     keyword: "",
@@ -80,7 +81,7 @@ let pages = {
     size: 20,
 }
 
-// 翻页
+// 翻页 
 const changePage = (newPage) => {
     pageInfo.value.current = newPage
     pages.current = pageInfo.value.current
