@@ -43,7 +43,7 @@
             </el-form-item>
             <el-divider content-position="left">内容提取设置</el-divider>
             <el-form-item label="提取LLM" label-width="150">
-                <el-cascader v-model="value" :options="llmList" @change="handleChange" style="width: 300px" />
+                <el-cascader v-model="newTask.api_settings_id" :options="llmList" @change="handleChange" style="width: 300px" emitPath=false />
             </el-form-item>
             <el-form-item label="指定模型" label-width="150">
                 <el-space :size="8" spacer=" " wrap>
