@@ -151,6 +151,7 @@ const getData = () => {
         // console.log(res);
         if (res.success) {
             taskInfo.value = res.data
+            getData();
         } else {
             ElMessage.error('加载任务信息失败')
         }
