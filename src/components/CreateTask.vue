@@ -15,16 +15,6 @@
             <el-form-item label="信息抓取网址" label-width="150">
                 <el-input v-model="newTask.crawl_url" type="textarea" :placeholder="crawl_url_placeholder" />
             </el-form-item>
-            <el-form-item label="域名抓取限制" label-width="150" v-if="newTask.crawl_mode==1">
-                <el-space :size="8" spacer=" " wrap>
-                    <el-switch v-model="newTask.only_crawl_site" />
-                    <el-tooltip content="开启后只抓取提供的网址的域名" raw-content>
-                        <el-icon>
-                            <QuestionFilled />
-                        </el-icon>
-                    </el-tooltip>
-                </el-space>
-            </el-form-item>
             <el-form-item label="执行时间" label-width="150">
                 <el-radio-group v-model="newTask.exec_type">
                     <el-radio-button value="1">立即开始</el-radio-button>
@@ -222,7 +212,6 @@ const initTask = {
     task_name: "",  // 任务名称
     crawl_mode: "1",  // 抓取模式 1地址抓取 2描述搜索抓取
     crawl_url: "",  // 抓取地址，多个地址换行分割
-    only_crawl_site: false,//是否只抓取抓取地址中的域名
     exec_type: "1",  // 执行类型 1-立即执行 2-周期循环
     cycle_type: "1",  // 周期类型 1-每日 2-每周
     week_days: [],  // 指定周几执行，可多选，英文逗号隔开
