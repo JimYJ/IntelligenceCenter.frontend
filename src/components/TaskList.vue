@@ -102,7 +102,7 @@
 import CreateTask from './CreateTask.vue'
 import { Search } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
-import { ref } from 'vue'
+import { ref, provide } from 'vue'
 // import { useTransition } from "@vueuse/core";
 import { post, get } from '../http';
 const onBack = () => {
@@ -151,13 +151,13 @@ const getData = () => {
         // console.log(res);
         if (res.success) {
             taskInfo.value = res.data
-            getData();
         } else {
             ElMessage.error('加载任务信息失败')
         }
     }).catch();
 }
 getData();
+provide('getData', getData);
 
 const apiTypeMapping = {
     [1]: 'OpenAI API',
