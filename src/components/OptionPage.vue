@@ -69,7 +69,7 @@
                     </el-tooltip>
                 </el-space>
             </el-form-item>
-            <el-form-item label="全局并发池" label-width="150">
+            <!-- <el-form-item label="全局并发池" label-width="150">
                 <el-space :size="8" spacer=" " wrap>
                     <el-switch v-model="option.crawlerConcurrencyOnly" />
                     <el-tooltip content="低配置电脑以及CPU过高的情况可开启本设置，开启后多个任务同时抓取时进度将变慢" raw-content>
@@ -78,7 +78,7 @@
                         </el-icon>
                     </el-tooltip>
                 </el-space>
-            </el-form-item>
+            </el-form-item> -->
         </el-form>
         <template #footer>
             <div class="dialog-footer">
