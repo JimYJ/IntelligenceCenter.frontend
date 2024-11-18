@@ -61,11 +61,12 @@
                 </el-table-column>
                 <el-table-column prop="extraction_model" label="抽取模型" min-width="250">
                     <template #default="{ row }">
-                        <el-space :size="2" spacer="/" wrap>
+                        <el-space :size="2" spacer="/" wrap v-if="row.api_type!=0">
                             <el-tag size="small">{{ getApiType(row.api_type) }}</el-tag>
                             <el-tag size="small">{{row.llm_setting_name}}</el-tag>
                             <el-tag size="small">{{row.extraction_model}}</el-tag>
                         </el-space>
+                        <div size="small" v-if="row.api_type==0">-</div>
                     </template>
                 </el-table-column>
                 <el-table-column prop="task_name" label="来源任务" min-width="200" />
@@ -121,7 +122,7 @@ const extractModeMapping = {
 };
 // 计算属性或方法用于获取 API 类型
 const getExtractMode = (mode) => {
-    return extractModeMapping[mode] || '未知类型';
+    return extractModeMapping[mode] || '未抽取';
 };
 const route = useRoute();
 const id = route.query.id;
