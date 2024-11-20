@@ -12,7 +12,7 @@
                     <el-radio-button value="2" @click="changePlaceholder(2)">智能抓取</el-radio-button>
                 </el-radio-group>
             </el-form-item>
-            <el-form-item label="信息抓取网址" label-width="150">
+            <el-form-item :label="crawl_mode_label" label-width="150">
                 <el-input v-model="newTask.crawl_url" type="textarea" :placeholder="crawl_url_placeholder" />
             </el-form-item>
             <el-form-item label="执行时间" label-width="150">
@@ -186,12 +186,15 @@ const submit = () => {
 };
 
 const crawl_url_placeholder = ref("网址以http://或https://为前缀，如果存在多个网址，每行一个网址")
+const crawl_mode_label = ref("信息抓取网址")
 // 方法：改变 placeholder
 const changePlaceholder = (mode) => {
     if (mode == "1") {
         crawl_url_placeholder.value = '网址以http://或https://为前缀，如果存在多个网址，每行一个网址';
+        crawl_mode_label.value = "信息抓取网址"
     } else if (mode == "2") {
         crawl_url_placeholder.value = '描述要获取的资料信息，大模型会根据你的描述搜索相关资料';
+        crawl_mode_label.value = "搜索信息描述"
     }
 };
 
