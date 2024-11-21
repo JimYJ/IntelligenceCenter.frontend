@@ -124,7 +124,7 @@
                         </el-tooltip>
                     </el-form-item> -->
                     <el-form-item label="并发数" label-width="150" v-if="newTask.crawl_option==false">
-                        <el-input-number v-model="newTask.crawlerConcurrency" :min="1" :max="1024" @change="handleChange" style="width: 150px" />
+                        <el-input-number v-model="newTask.concurrent_count" :min="1" :max="1024" @change="handleChange" style="width: 150px" />
                     </el-form-item>
                     <el-form-item label="抓取间隔(秒)" label-width="150" v-if="newTask.crawl_option==false">
                         <el-input-number v-model="newTask.scraping_interval" :min="1" :max="3600" @change="handleChange" style="width: 150px" />
