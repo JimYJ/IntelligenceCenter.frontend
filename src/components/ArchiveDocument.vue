@@ -64,7 +64,7 @@
                                     </div>
                                 </template>
                                 <el-image class="images-list" :key="item" v-for="item in imgList" :preview-src-list="imgList" :src="item" :fit="cover" />
-                                <div v-if="imgList.length==0">暂无图片</div>
+                                <div v-if="imgList.length==0" style="color: #888;">暂无图片</div>
                                 <!-- <template #footer>共215个资源</template> -->
                             </el-card>
                             <el-card class="file-links-header" shadow="hover" style="width: 100%;">
@@ -79,7 +79,7 @@
                                             </el-link>
                                         </el-tooltip>
                                     </div>
-                                    <div v-if="fileLinks.length==0">暂无文件</div>
+                                    <div v-if="fileLinks.length==0" style="display: flex; justify-content: center; color: #888;">暂无文件</div>
                                 </div>
                             </el-card>
                         </div>
@@ -108,12 +108,7 @@ const getApiType = (apiType) => {
 };
 const size = ref(8)
 
-const imgList = [
-    'https://fuss10.elemecdn.com/9/bb/e27858e973f5d7d3904835f46abbdjpeg.jpeg',
-    'https://fuss10.elemecdn.com/d/e6/c4d93a3805b3ce3f323f7974e6f78jpeg.jpeg',
-    'https://fuss10.elemecdn.com/3/28/bbf893f792f03a54408b3b7a7ebf0jpeg.jpeg',
-    'https://fuss10.elemecdn.com/2/11/6535bcfb26e4c79b48ddde44f4b6fjpeg.jpeg',
-]
+const imgList = ref([])
 const archiveDocs = ref({
     id: null,
     doc_name: '',
@@ -134,10 +129,7 @@ const archiveDocs = ref({
     created_at: '',
     updated_at: ''
 });
-const fileLinks = ref([
-    { url: 'https://example.com/file1.pdf', icon: '/icon/pdf.png' },
-    { url: 'https://example.com/file2.pdf', icon: '/icon/pdf.png' },
-]);
+const fileLinks = ref([]);
 const route = useRoute();
 const id = route.query.id;
 
@@ -156,6 +148,43 @@ const getData = () => {
         }
     }).catch(err => {
         ElMessage.error('请求档案信息时出错:' + err)
+    });
+    get("/archive/doc/resource", pages).then(res => {
+        console.log(res);
+        if (res.success) {
+            const imgExtensions = ['gif', 'jpg', 'jpeg', 'png'];
+            const iconMapping = {
+                'cdr': '/icon/cdr.png',
+                'doc': '/icon/doc.png',
+                'magnet': '/icon/magnet.png',
+                'pdf': '/icon/pdf.png',
+                'ppt': '/icon/ppt.png',
+                'psd': '/icon/psd.png',
+                'xls': '/icon/xls.png',
+                'zip': '/icon/zip.png',
+            };
+            if (!res.data || res.data.length === 0) {
+                fileLinks.value = [];
+            } else {
+                const imgList = [];
+                fileLinks.value = res.data.map(url => {
+                    const extension = url.split('.').pop().toLowerCase();
+                    if (imgExtensions.includes(extension)) {
+                        imgList.push(url);
+                        return null;
+                    } else {
+                        return {
+                            url: url,
+                            icon: iconMapping[extension] || '/icon/file.png'
+                        };
+                    }
+                }).filter(item => item !== null);
+            }
+        } else {
+            ElMessage.error('加载资源信息失败:' + res.message)
+        }
+    }).catch(err => {
+        ElMessage.error('请求资源信息时出错:' + err)
     });
 }
 getData()
