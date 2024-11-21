@@ -60,12 +60,14 @@
                     </template>
                 </el-table-column>
                 <el-table-column prop="extraction_model" label="抽取模型" min-width="250">
-                    <el-space :size="2" spacer="/" wrap v-if="row.api_type!=0">
-                        <el-tag size="small">{{ getApiType(row.api_type) }}</el-tag>
-                        <el-tag size="small">{{row.llm_setting_name}}</el-tag>
-                        <el-tag size="small">{{row.extraction_model}}</el-tag>
-                    </el-space>
-                    <div size="small" v-if="row.api_type==0">-</div>
+                    <template #default="{ row }">
+                        <el-space :size="2" spacer="/" wrap v-if="row.api_type!=0">
+                            <el-tag size="small">{{ getApiType(row.api_type) }}</el-tag>
+                            <el-tag size="small">{{row.llm_setting_name}}</el-tag>
+                            <el-tag size="small">{{row.extraction_model}}</el-tag>
+                        </el-space>
+                        <div size="small" v-if="row.api_type==0">-</div>
+                    </template>
                 </el-table-column>
                 <el-table-column prop="task_name" label="来源任务" min-width="200" />
                 <el-table-column prop="resource_num" label="资源数量" min-width="80" />
