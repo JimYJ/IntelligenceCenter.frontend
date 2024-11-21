@@ -12,10 +12,12 @@
                 </template>
                 <template #content>
                     <div class="flex items-center">
-                        <span class="text-large font-600 mr-3">{{archiveDocs.archive_name}}</span>
-                        <span class="text-sm mr-2" style="color: var(--el-text-color-regular)">
-                            {{archiveDocs.doc_name}}
-                        </span>
+                        <el-space :size="10">
+                            <span class="text-large font-600">{{archiveDocs.archive_name}}</span>
+                            <span class="text-sm" style="color: var(--el-text-color-regular)">
+                                {{archiveDocs.doc_name}}
+                            </span>
+                        </el-space>
                         <!-- <el-space :size="size" spacer="">
                             <el-tag>金融</el-tag>
                             <el-tag>亚洲</el-tag>
@@ -79,7 +81,9 @@
                                             </el-link>
                                         </el-tooltip>
                                     </div>
-                                    <div v-if="fileLinks.length==0" style="display: flex; justify-content: center; color: #888;">暂无文件</div>
+                                    <div v-if="fileLinks.length==0" style="color: #888; text-align: center; width: 100%;">
+                                        <P>暂无文件</P>
+                                    </div>
                                 </div>
                             </el-card>
                         </div>
